@@ -15,35 +15,35 @@ Vue.use(VueRouter)
 Vue.use(Vee)
 
 export var router = new VueRouter({
-  mode: 'history',
-  base: __dirname,
-  routes: [
-    { path: '/', component: Home },
-    { path: '/login', component: LogIn },
-    { path: '/create-study', component: CreateStudy,
-      children: [
-        { path: 'create-one', component: CreateOne }
-      ]},
-    { path: '/delete-study', component: DeleteStudy },
-    { path: '*', redirect: '/' }
-  ]
+    mode: 'history',
+    base: __dirname,
+    routes: [
+        { path: '/', component: Home },
+        { path: '/login', component: LogIn },
+        { path: '/create-study', component: CreateStudy,
+            children: [
+                { path: 'create-one', component: CreateOne }
+            ]},
+        { path: '/delete-study', component: DeleteStudy },
+        { path: '*', redirect: '/' }
+    ]
 })
 
 router.beforeEach(({meta, path}, from, next) => {
-  var { auth = true } = meta
-  var isLogin = Boolean(store.state.user)
+    var { auth = true } = meta;
+    var isLogin = Boolean(store.state.user);
 
-  if (auth && !isLogin && path !== '/login') {
-    return next({ path: '/login' })
-  }
-  next()
+    if (auth && !isLogin && path !== '/login') {
+        return next({ path: '/login' });
+    }
+    next();
 })
 
 // Make sure to inject the router.
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  store,
-  router,
-  render: h => h(App)
+    el: '#app',
+    store,
+    router,
+    render: h => h(App)
 })
