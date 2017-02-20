@@ -3,22 +3,24 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
+          <div class="alert alert-danger" v-if="error">
+              <p>{{ error }}</p>
+          </div>
           <div class="modal-header">
             <slot name="header">
-              Delete Study
+              default header
             </slot>
           </div>
 
           <div class="modal-body">
             <slot name="body">
-              Delete Study
+              default body
             </slot>
           </div>
 
           <div class="modal-footer">
             <slot name="footer">
-              Delete Study
-              <button class="modal-default-button ui red button" @click="$emit('close')">
+              <button class="ui blue button" @click="$emit('close')">
                 OK
               </button>
             </slot>

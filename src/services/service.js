@@ -1,6 +1,7 @@
 import {router} from '../main';
 import config from '../config';
 import store from '../store';
+import Vue from 'vue';
 
 // URL and endpoint constants
 const API_URL = 'http://localhost:9000';
@@ -25,6 +26,11 @@ export default {
             data.studyId = data.study;
             window.localStorage.setItem(SESSION_KEY, JSON.stringify(data));
             session = data;
+
+            // create common headers
+            Vue.http.headers.common['Content-Type'] = 'application/json';
+            Vue.http.headers.common['Bridge-Session'] = session.sessionToken;
+
             this.user.authenticated = true;
 
             store.commit('refresh');
@@ -35,7 +41,7 @@ export default {
             }
         }).error((err) => {
             context.error = err;
-        })
+        });
     },
 
     // To log out, we just need to remove the token
@@ -54,40 +60,54 @@ export default {
         }
     },
 
-    // The object to be passed as a header for authenticated requests
-    getAuthHeader () {
-        var headers = {'Content-Type': 'application/json'};
-        if (session && session.sessionToken) {
-            headers['Bridge-Session'] = session.sessionToken;
-        }
-        return headers;
-    },
-
-    createStudyAndUser (context, adminIds, study, users, redirect) {
+    createStudyAndUsers (context, adminIds, study, users, redirect) {
         var body = {
             'adminIds': adminIds,
             'study': study,
             'users': users
-        }
-        return context.$http.post(API_URL + config.createStudyAndUser, body, {
-            headers: this.getAuthHeader()
-        }).then(response => {
+        };
+        return context.$http.post(API_URL + config.createStudyAndUsers, body).then(response => {
             if (redirect) {
                 router.replace(redirect);
             }
         }).error((err) => {
             context.error = err;
-        })
+        });
     },
 
     getStudyList (context) {
-        return context.$http.get(API_URL + config.getStudyList, {
-            headers: this.getAuthHeader()
-        }).then(response => {
+        return context.$http.get(API_URL + config.getStudyList).then(response => {
             var data = response.data;
-            context.studyList = data.items;
+            // context.studyList = data.items;
+            store.commit('refreshStudyList', data.items);
         }).error((err) => {
             context.error = err;
-        })
+        });
+    },
+
+    getStudy (context, id) {
+        return context.$http.get(API_URL + config.getStudy + id).then(response => {
+            var data = response.data;
+            // context.currentStudy = data;
+            store.commit('changeCurrentStudy', data);
+        }).error((err) => {
+            context.error = err;
+        });
+    },
+
+    updateStudy (context, study) {
+        return context.$http.post(API_URL + config.updateStudy + study.identifier, study).then(response => {
+            console.log('updated');
+        }).error((err) => {
+            context.error = err;
+        });
+    },
+
+    deleteStudy (context, studyId, physical) {
+        return context.$http.delete(API_URL + config.updateStudy + studyId, physical).then(response => {
+            console.log('delete');
+        }).error((err) => {
+            context.error = err;
+        });
     }
 }

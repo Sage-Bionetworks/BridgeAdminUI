@@ -2,17 +2,27 @@ import Vue from 'vue'
 import App from './App.vue'
 import Home from './components/Home.vue'
 import LogIn from './components/LogIn.vue'
-import CreateStudy from './components/CreateStudy.vue'
+import StudyList from './components/StudyList.vue'
 import CreateOne from './components/CreateOne.vue'
 import DeleteStudy from './components/DeleteStudy.vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import store from './store'
 import Vee from 'vee-validate'
+import VueSelect from 'vue-select'
+import Settings from './components/Settings.vue'
+import Cache from './components/Cache.vue'
+import Toastr from 'vue-toastr';
+import Modal from './components/Modal.vue';
+
+require('vue-toastr/src/vue-toastr.less');
 
 Vue.use(VueResource)
 Vue.use(VueRouter)
 Vue.use(Vee)
+Vue.component('v-select', VueSelect)
+Vue.component('vue-toastr', Toastr);
+Vue.component('modal', Modal);
 
 export var router = new VueRouter({
     mode: 'history',
@@ -20,11 +30,13 @@ export var router = new VueRouter({
     routes: [
         { path: '/', component: Home },
         { path: '/login', component: LogIn },
-        { path: '/create-study', component: CreateStudy,
+        { path: '/study-list', component: StudyList,
             children: [
-                { path: 'create-one', component: CreateOne }
+                { path: 'create-one', component: CreateOne },
+                { path: 'delete-study', component: DeleteStudy }
             ]},
-        { path: '/delete-study', component: DeleteStudy },
+        { path: '/settings', component: Settings },
+        { path: '/cache', component: Cache },
         { path: '*', redirect: '/' }
     ]
 })
@@ -46,4 +58,4 @@ new Vue({
     store,
     router,
     render: h => h(App)
-})
+});

@@ -23,8 +23,9 @@ module.exports = {
     signIn: '/v3/auth/signIn',
     signOut: '/v3/auth/signOut',
     postStudy: '/v3/studies',
-    createStudyAndUser: '/v3/studies/createStudyAndUser',
+    createStudyAndUsers: '/v3/studies/init',
     getStudy: '/v3/studies/',
+    updateStudy: '/v3/studies/',
     getCurrentStudy: '/v3/studies/self',
-    getStudyList: '/v3/studies?summary=true'
+    getStudyList: '/v3/studies'
 }

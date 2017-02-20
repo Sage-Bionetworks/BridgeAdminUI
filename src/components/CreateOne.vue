@@ -3,24 +3,18 @@
         <div class="create-one">
             <div class="admin-info">
                 <h2>Admin Information</h2>
-                    <div class="form-group">
-                        <label for="admin-list">Admin Accounts attached to this new Study</label>
-                        <select multiple class="form-control" id="admin-list" v-model="selectedAdmins">
-                            <option v-for="(value, key) in adminList" v-bind:value="value">
-                                {{ key }}
-                            </option>
-                        </select>
-                    </div>
+                <label for="admin-list">Admin Accounts attached to this new Study</label>
+                <v-select id = "admin-list" multiple :onChange="pushToSelectedAdmins" :options="Object.keys(adminList)"></v-select>
             </div>
             <div class="study-info">
                 <h2>Study Information</h2>
-                <form> 
-                    <div class="form-group" :class="{'has-error': errors.has('study-id') }">
+                <form class="ui form"> 
+                    <div class="form-group required" :class="{'has-error': errors.has('study-id') }">
                         <label for="study-id">Study ID</label>
-                        <input type="identifier" class="form-control" name="study-id" v-model="study.identifier" v-validate:identifier.initial="'required|alpha_dash'" :class="{'input': true, 'is-danger': errors.has('study-id') }">
+                        <input type="identifier" class="form-control" name="study-id" v-model="study.identifier" v-validate:identifier.initial="'required|alpha_dash'" :class="{'input': true, 'error': errors.has('study-id') }">
                         <p class="text-danger" v-if="errors.has('study-id')">{{ errors.first('study-id') }}</p>
                     </div>
-                    <div class="form-group" :class="{'has-error': errors.has('study-name') }">
+                    <div class="form-group required" :class="{'has-error': errors.has('study-name') }">
                         <label for="study-name">Study Name</label>
                         <input type="name" class="form-control" name="study-name" v-model="study.name" v-validate:name.initial="'required|alpha_dash'" :class="{'input': true, 'is-danger': errors.has('study-name') }">
                         <p class="text-danger" v-if="errors.has('study-name')">{{ errors.first('study-name') }}</p>
@@ -89,10 +83,12 @@
 
                 <button @click="addUser()" class="btn btn-primary" v-bind:class="{ disabled: loading }">
                     Add More User
+                    <i v-if="loading" class="fa fa-circle-o-notch fa-spin" style="font-size:12px"></i>
                 </button>
 
                 <button @click="removeOneUser()" class="btn btn-danger" v-bind:class="{ disabled: loading }">
                     Remove One User
+                    <i v-if="loading" class="fa fa-circle-o-notch fa-spin" style="font-size:12px"></i>
                 </button>
 
             </div>
@@ -104,7 +100,12 @@
         </div>
         <i v-if="loading" class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i>
         <button class="btn btn-primary" @click="validateForm()" v-bind:class="{ disabled: loading }">Create Study and User</button>
-        <router-link to="/create-study"><button class="btn btn-danger">Cancel</button></router-link>    
+        <router-link to="/study-list">
+            <button class="btn btn-danger">
+                Cancel
+                <i v-if="loading" class="fa fa-circle-o-notch fa-spin" style="font-size:12px"></i>
+            </button>
+        </router-link>    
 
     </div>
 </template>
@@ -152,6 +153,13 @@
             }
         },
         methods: {
+            pushToSelectedAdmins (selectedAdmins) {
+                var newAdmins = []
+                for (var i = 0; i < selectedAdmins.length; i++) {
+                  newAdmins.push(config.adminList[selectedAdmins[i]]);
+                }
+                this.selectedAdmins = newAdmins;
+            },
             validateForm () {
                 this.error = '';
 
@@ -190,9 +198,15 @@
                     }
                     this.users[user].roles = roles;
                 }
-                service.createStudyAndUser(this, this.selectedAdmins, this.study, this.users, '/create-study').then(() => {
+                service.createStudyAndUsers(this, this.selectedAdmins, this.study, this.users, '/study-list').then(() => {
+                    if (!this.error) {
+                        this.$parent.$refs.toastr.s('Study Created!');
+                        service.getStudyList(this.$parent);
+                    } else {
+                        this.$parent.$refs.toastr.e('Error Occurred!');
+                    }
                     this.loading = false;
-                })
+                });
             },
             addUser () {
                 let user = {

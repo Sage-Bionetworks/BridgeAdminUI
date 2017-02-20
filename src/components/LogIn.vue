@@ -1,5 +1,40 @@
 <template>
-    <div class="col-sm-4 col-sm-offset-3">
+    <div class="col-md-8">
+        <div class="fixed-header">
+            <div class="fixed-header-title"> 
+                <div class="fixed-header-heading"> 
+                    <h3>General</h3> 
+                </div> 
+                <div class="fixed-header-buttons"> 
+                    <button class="ui tiny button" data-bind="click: publicKey">Download CMS Public Key…</button> 
+                    <button class="ui tiny primary button" data-bind="click: save">Save</button> 
+                </div> 
+            </div> 
+            <div class="ui secondary pointing menu"> 
+                <a href="#/settings/general" class="item active" data-bind="css:{active:$data.active === 'info'}"> 
+                    <i class="setting icon"></i> General 
+                </a> 
+                <a href="#/settings/email" class="item" data-bind="css:{active:$data.active === 'email'}"> 
+                    <i class="mail outline icon"></i> Email 
+                </a> 
+                <a href="#/settings/eligibility" class="item" data-bind="visible: isPublicObs, css:{active:$data.active === 'eligibility'}"> 
+                    <i class="users icon"></i> Eligibility Criteria 
+                </a> 
+                <a href="#/settings/data_groups" class="item" data-bind="css:{active:$data.active === 'data_groups'}"> 
+                    <i class="tag icon"></i> Data Groups 
+                </a> 
+                <a href="#/settings/password_policy" class="item" data-bind="visible: isPublicObs, css:{active:$data.active === 'password_policy'}"> 
+                    <i class="lock icon"></i> Password Policy 
+                </a> 
+                <a href="#/settings/user_attributes" class="item" data-bind="css:{active:$data.active === 'user_attributes'}"> 
+                    <i class="add user icon"></i> User Profile 
+                </a> 
+                <a href="#/settings/synapse" class="item" data-bind="css:{active:$data.active === 'synapse'}"> 
+                    <i class="cubes icon"></i> Synapse 
+                </a> 
+            </div> 
+        </div>
+
         <h2>Log In</h2>
         <p>Log in to your account to get started.</p>
         <div class="alert alert-danger" v-if="error">
@@ -40,8 +75,10 @@
                 v-model="credentials.study"
             >
         </div>
-        <button class="btn btn-primary" @click="submit()" v-bind:class="{ disabled: loading }">Access</button>
-        <i v-if="loading" class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i>
+        <button class="ui primary button" @click="submit()" v-bind:class="{ disabled: loading }">
+            Access
+            <i v-if="loading" class="fa fa-circle-o-notch fa-spin" style="font-size:12px"></i>
+        </button>
 
     </div>
 </template>
@@ -83,7 +120,7 @@ export default {
             window.sessionStorage.setItem('credentials', JSON.stringify(credentials));
             // We need to pass the component's this context
             // to properly make use of http in the auth service
-            service.logIn(this, credentials, '/create-study').then(() => {
+            service.logIn(this, credentials, '/study-list').then(() => {
                 this.loading = false;
             })
         }
@@ -91,3 +128,6 @@ export default {
 
 }
 </script>
+
+<style>
+</style>
