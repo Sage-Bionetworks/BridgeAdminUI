@@ -22,6 +22,7 @@ export default {
     logIn (context, creds, redirect) {
         this.API_URL = config.host[creds.env];
         return context.$http.post(LOGIN_URL, creds, (data) => {
+            // context.error = '';
             data.studyName = creds.study;
             data.studyId = data.study;
             window.localStorage.setItem(SESSION_KEY, JSON.stringify(data));
@@ -48,7 +49,7 @@ export default {
     logOut (redirect) {
         window.localStorage.removeItem(SESSION_KEY);
         store.commit('refresh');
-        router.replace(redirect);
+        // router.replace(redirect);
     },
 
     checkAuth () {
@@ -78,7 +79,6 @@ export default {
     getStudyList (context) {
         return context.$http.get(API_URL + config.getStudyList).then(response => {
             var data = response.data;
-            // context.studyList = data.items;
             store.commit('refreshStudyList', data.items);
         }).error((err) => {
             context.error = err;
@@ -88,7 +88,6 @@ export default {
     getStudy (context, id) {
         return context.$http.get(API_URL + config.getStudy + id).then(response => {
             var data = response.data;
-            // context.currentStudy = data;
             store.commit('changeCurrentStudy', data);
         }).error((err) => {
             context.error = err;

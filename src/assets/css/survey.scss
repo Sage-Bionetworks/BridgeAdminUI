@@ -1,0 +1,223 @@
+@import "./lib.scss";
+.survey {
+    padding-bottom: 14rem;
+     
+    input[type=text] {
+        border: 1px solid #e5e5e5;
+        width: 100%;
+        border-radius:2px;
+    }
+}
+.element {
+    @include flex-box(row);
+    width: 100%;
+    /*hides the pulldown menu to change type, but undoubtedly also cleans up the formatting
+        in some cases as well. Oh well. */
+    /*overflow: hidden;*/
+    margin-bottom: 1rem;
+    max-height: 50rem;
+
+    /* container */
+    @include user-select(none);
+    border: 1px solid #aaa;
+    border-radius: 6px;
+}
+    .element:nth-child(odd) {
+        background-color: rgba(0,0,0,.03);
+    }
+    .element-callout {
+        @include flex-box(column);
+        @include align-content(flex-end);
+        @include justify-content(space-between);
+        text-align: center;
+        padding: .5rem 1rem 1rem 1rem;
+    }
+        .element-callout .circular.label {
+            margin-top: 1rem;
+        }
+        .element-callout-box {
+            @include flex(1);
+            text-align: center;
+
+            .ui.compact.secondary.menu {
+                border:none;
+                margin-top: .5rem;
+
+                .item {
+                    margin: 0;
+                    padding: .4rem;
+                    cursor:pointer;
+                }
+            }
+
+        }
+                .element-callout-identifier {
+                    text-align: center;
+                    font-size: larger;
+                    font-weight: bold;
+                }
+        .element-callout-delete {
+            .item {
+                cursor:pointer;
+                width:100%;
+                padding: .4rem 0!important;
+            }
+        }
+.element-content {
+    @include flex(1);
+    @include justify-content(stretch);
+    @include align-items(stretch);
+    padding: 1rem 0rem 1rem 2rem;
+}
+    /* The use of !important overrides semantic UI's styles. We do this elsewhere too. */
+    .element-content-segment {
+        padding-top: .75rem!important;
+        background-color:inherit!important;
+        box-shadow:none!important;
+    }
+    .constraints-label {
+        margin-bottom: .5rem!important;
+
+        .menu {
+            display: none;
+        }
+        * {
+            display: inline-block;
+        }
+    }
+    .element-content-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        padding: .4rem 0;
+        margin-bottom: .5rem;
+        background-color: white;
+        border: 1px solid #e5e5e5;
+    }
+    .element-content-prompt {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: .5rem;
+        background-color: white;
+        border: 1px solid #e5e5e5;
+    }
+        .element-content-prompt-detail {
+            font-size: 1.1rem;
+            color: #bbb;
+            font-weight: normal;
+            font-style: italic;
+            background-color: white;
+            border: 1px solid #e5e5e5;
+        }
+    .element-content-constraints {
+        border-collapse: collapse;
+    }
+        .element-content-constraints td {
+            vertical-align: baseline;
+        }
+        .element-content-constraints-label {
+            text-align: right;
+            padding: .2rem .8rem .2rem .4rem;
+            white-space: nowrap;
+        }
+        .element-content-constraints-control {
+            padding: .2rem 1rem .2rem .2rem;
+        }
+            .element-content-constraints-control .numeric {
+                display: block;
+                width: 4rem;
+            }
+            .element-content-constraints-control select.ui.dropdown {
+                height: auto;
+            }
+
+
+.rules-table {
+    border-top: 1px solid silver;
+    border-bottom: 1px solid silver;
+    padding: 1rem;
+    max-height: 200px;
+    overflow-y: scroll;
+}
+    .rules-table-rule {
+        @include flex-box(row);
+        @include align-items(center);
+    }
+        .rules-table-rule-cell {
+            padding: .2rem .2rem;
+            white-space: nowrap;
+        }
+        .rules-table-rule-cell input[text], .rules-table-rule-cell select {
+            width: 10rem ! important;
+        }
+        .rules-table-rule-cell input[radio] {
+            width:1rem!important;
+        }
+        .rules-table-rule-cell:last-child {
+            @include flex(2);
+            text-align: right;
+        }
+    .rules-actions {
+        padding: 0 1.5rem 1.5rem 1.5rem;
+    }
+    .rules-editor-actions {
+        padding: 2rem 1.5rem 1.5rem 1.5rem;
+    }
+.enum-list {
+    padding:0!important;
+    overflow-y: auto;
+    max-height: 315px;
+    border: 1px solid #e5e5e5;
+    border-top: none;
+}
+    .enum-list-server-text {
+        font-size: .8rem;
+        color: #aaa;
+    }
+.enum-scrollbox {
+    max-height:16rem;
+    overflow-y:auto;
+    border: 1px solid #e5e5e5;
+    border-top: none;
+    padding: 1rem!important;
+    margin-top: -14px!important;
+}
+.textarea {
+    display: block;
+    width: 100%;
+    padding: .3rem;
+    overflow: hidden;
+}
+[contenteditable] {
+    white-space: pre-wrap;
+}
+[contenteditable]:empty:before, [contenteditable] {
+    content:attr(data-placeholder);
+    -webkit-user-select: text!important;
+    user-select: text!important;
+}
+/* We do not wrap the survey editor in .ui .form, because the inputs are styled very wrongly, so we 
+    don't get all of Semantic UI's styling, and that includes the form error styling. Emulating it here. */
+.survey {
+    .error input, .error div[contenteditable] {
+        background: #fff6f6;
+        border-color: #e0b4b4;
+        color: #9f3a38;
+        box-shadow: none;        
+    }
+    .error div[contenteditable] {
+        border: 1px solid #9f3a38;
+        border-radius: .28571429rem;
+    }
+}
+.enum-list.list-being-edited {
+    background-color: rgba(229,229,229,.5);
+}
+    .item-being-edited, .item-being-edited:hover {
+        background-color: #fff;
+    }
+    .vs-item .angle.right.icon, .item-being-edited .delete.icon {
+        display: none;
+    }
+    .item-being-edited .angle.right.icon {
+        display: block;
+    }

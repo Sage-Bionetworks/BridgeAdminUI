@@ -1,84 +1,53 @@
 <template>
-    <div class="col-md-8">
+    <div>
         <div class="fixed-header">
             <div class="fixed-header-title"> 
                 <div class="fixed-header-heading"> 
-                    <h3>General</h3> 
-                </div> 
-                <div class="fixed-header-buttons"> 
-                    <button class="ui tiny button" data-bind="click: publicKey">Download CMS Public Key…</button> 
-                    <button class="ui tiny primary button" data-bind="click: save">Save</button> 
+                    <h3>Log In</h3> 
                 </div> 
             </div> 
-            <div class="ui secondary pointing menu"> 
-                <a href="#/settings/general" class="item active" data-bind="css:{active:$data.active === 'info'}"> 
-                    <i class="setting icon"></i> General 
-                </a> 
-                <a href="#/settings/email" class="item" data-bind="css:{active:$data.active === 'email'}"> 
-                    <i class="mail outline icon"></i> Email 
-                </a> 
-                <a href="#/settings/eligibility" class="item" data-bind="visible: isPublicObs, css:{active:$data.active === 'eligibility'}"> 
-                    <i class="users icon"></i> Eligibility Criteria 
-                </a> 
-                <a href="#/settings/data_groups" class="item" data-bind="css:{active:$data.active === 'data_groups'}"> 
-                    <i class="tag icon"></i> Data Groups 
-                </a> 
-                <a href="#/settings/password_policy" class="item" data-bind="visible: isPublicObs, css:{active:$data.active === 'password_policy'}"> 
-                    <i class="lock icon"></i> Password Policy 
-                </a> 
-                <a href="#/settings/user_attributes" class="item" data-bind="css:{active:$data.active === 'user_attributes'}"> 
-                    <i class="add user icon"></i> User Profile 
-                </a> 
-                <a href="#/settings/synapse" class="item" data-bind="css:{active:$data.active === 'synapse'}"> 
-                    <i class="cubes icon"></i> Synapse 
-                </a> 
+            <div class="ui empty secondary pointing menu"> 
             </div> 
         </div>
 
-        <h2>Log In</h2>
-        <p>Log in to your account to get started.</p>
-        <div class="alert alert-danger" v-if="error">
-            <p>{{ error }}</p>
-        </div>
-        <div class="form-group">
-            <label for="env">Enviornment</label>
-            <select class="form-control" id="env" v-model="credentials.env">
-                <option v-for="env in envList">
-                    {{ env }}
-                </option>
-            </select>
-        </div>
+        <div class="ui form">
+            <p>Log in to your account to get started.</p>
+            <div class="ui negative message" v-if="error">
+                <p>{{ error }}</p>
+            </div>
+            <div class="three wide field">
+                <label for="env">Enviornment</label>
+                <basic-select id="env" :options="envList" :selected-option="selectedEnv" @select="onSelectEnv"></basic-select>
+            </div>
 
-        <hr>
+            <hr>
 
-        <div class="form-group">
-            <input
-                type="email"
-                class="form-control"
-                placeholder="Enter your email"
-                v-model="credentials.email"
-            >
+            <div class="three wide field">
+                <input
+                    type="email"
+                    placeholder="Enter your email"
+                    v-model="credentials.email"
+                >
+            </div>
+            <div class="three wide field">
+                <input
+                    type="password"
+                    placeholder="Enter your password"
+                    v-model="credentials.password"
+                >
+            </div>
+            <div class="three wide field">
+                <input
+                    type="text"
+                    placeholder="Enter your study id"
+                    v-model="credentials.study"
+                >
+            </div>
+            <button class="ui primary button" @click="submit()" v-bind:class="{ disabled: loading }">
+                Access
+                <i v-if="loading" class="fa fa-circle-o-notch fa-spin" style="font-size:12px"></i>
+            </button>
         </div>
-        <div class="form-group">
-            <input
-                type="password"
-                class="form-control"
-                placeholder="Enter your password"
-                v-model="credentials.password"
-            >
-        </div>
-        <div class="form-group">
-            <input
-                type="study-id"
-                class="form-control"
-                placeholder="Enter your study id"
-                v-model="credentials.study"
-            >
-        </div>
-        <button class="ui primary button" @click="submit()" v-bind:class="{ disabled: loading }">
-            Access
-            <i v-if="loading" class="fa fa-circle-o-notch fa-spin" style="font-size:12px"></i>
-        </button>
 
     </div>
 </template>
@@ -86,12 +55,14 @@
 <script>
 import service from '../services/service'
 import config from '../config'
+import { BasicSelect } from 'vue-search-select'
 
 export default {
+    components: {
+        BasicSelect
+    },
     data () {
         return {
-            // We need to initialize the component with any
-            // properties that will be used in it
             loading: false,
             showModal: false,
             credentials: {
@@ -100,15 +71,27 @@ export default {
                 password: window.sessionStorage.getItem('credentials') === null ? '' : JSON.parse(window.sessionStorage.getItem('credentials')).password,
                 study: window.sessionStorage.getItem('credentials') === null ? '' : JSON.parse(window.sessionStorage.getItem('credentials')).study
             },
+            selectedEnv: {},
             error: ''
         }
     },
     computed: {
         envList: function () {
-            return Object.keys(config.host);
+            // return Object.keys(config.host);
+            return Object.keys(config.host).map((x) => {
+                return {
+                    value: x,
+                    text: x
+                }
+            });
         }
     },
     methods: {
+        onSelectEnv (item) {
+            this.selectedEnv = item
+            this.credentials.env = item.value;
+            console.log(this.credentials.env)
+        },
         submit () {
             this.loading = true;
             var credentials = {
@@ -124,10 +107,13 @@ export default {
                 this.loading = false;
             })
         }
+    },
+    mounted () {
+        this.selectedEnv = {
+            value: this.credentials.env,
+            text: this.credentials.env
+        }
     }
 
 }
 </script>
-
-<style>
-</style>

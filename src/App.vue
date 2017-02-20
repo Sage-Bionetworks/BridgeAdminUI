@@ -1,10 +1,10 @@
 <template>
     <div id="app">
-        <header data-bind="visible: showNavigationObs, css: {dev: isDevEnvObs}" class="dev"> 
+        <header class="dev"> 
             <h2><i class="white heartbeat icon"></i> Bridge Admin</h2> 
         </header>
-        <div class="container">
-            <div class="ui vertical menu col-md-4">
+        <section>
+            <nav class="ui vertical menu">
                 <div class="tabset">
                     <a class="active">Navigation</a>
                 </div>
@@ -18,11 +18,11 @@
                 <div class="item" v-if="user">
                     <i class="sign out icon"></i> <a href="" @click="logOut()">Sign Out</a>
                 </div>
-            </div>
-            <div class="col-md-8">
+            </nav>
+            <main class="col-md-8">
                 <router-view></router-view>
-            </div>
-        </div>
+            </main>
+        </section>
     </div>
 </template>
 
@@ -46,6 +46,6 @@ export default {
 }
 </script>
 
-<style>
-@import "./assets/general.scss";
+<style lang="sass">
+@import "./assets/css/main.scss";
 </style>
