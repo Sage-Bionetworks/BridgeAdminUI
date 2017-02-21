@@ -1,4 +1,4 @@
-<template id="modal-template">
+<template id="modal-template" class="ui small modal">
   <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper">

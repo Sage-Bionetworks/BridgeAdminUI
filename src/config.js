@@ -27,5 +27,8 @@ module.exports = {
     getStudy: '/v3/studies/',
     updateStudy: '/v3/studies/',
     getCurrentStudy: '/v3/studies/self',
-    getStudyList: '/v3/studies'
+    getStudyList: '/v3/studies',
+    getStudySummaryList: '/v3/studies?summary=true',
+    getCacheKeys: '/v3/cache',
+    deleteCacheKey: '/v3/cache/'
 }

@@ -12,13 +12,13 @@
     "element-ui": "^1.0.0",
     "lodash": "^4.17.4",
     "semantic-ui": "^2.2.7",
-    "vee-validate": "^2.0.0-beta.22",
     "vue": "^2.1.10",
     "vue-resource": "^0.7.0",
     "vue-router": "^2.1.1",
     "vue-search-select": "^2.3.5",
     "vue-select": "^2.0.0",
-    "vue-toastr": "^2.0.5"
+    "vue-toastr": "^2.0.5",
+    "vuelidate": "^0.2.0"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",

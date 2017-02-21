@@ -10,14 +10,16 @@
             </div> 
         </div>
 
-        <div class="ui form">
+        <div class="ui form scrollbox">
             <p>Log in to your account to get started.</p>
             <div class="ui negative message" v-if="error">
-                <p>{{ error }}</p>
+                <h3>There is an issue with your request</h3>
+                <p>{{ error.message }}</p>
+
             </div>
             <div class="three wide field">
                 <label for="env">Enviornment</label>
-                <basic-select id="env" :options="envList" :selected-option="selectedEnv" @select="onSelectEnv"></basic-select>
+                <basic-select id="env" :options="envList" :selected-option="selectedEnv" @select="onSelectEnv" :class="{ disabled: loading }"></basic-select>
             </div>
 
             <hr>
@@ -36,16 +38,11 @@
                     v-model="credentials.password"
                 >
             </div>
-            <div class="three wide field">
-                <input
-                    type="text"
-                    placeholder="Enter your study id"
-                    v-model="credentials.study"
-                >
+            <div class="three wide field" :class="{ disabled: loading }">
+                <basic-select id="studyList" :options="studySummaryList" :selected-option="selectedStudy" @select="onSelectStudy"></basic-select>
             </div>
-            <button class="ui primary button" @click="submit()" v-bind:class="{ disabled: loading }">
+            <button class="ui primary button" @click="submit()" v-bind:class="{ loading: loading, disabled: loading }">
                 Access
-                <i v-if="loading" class="fa fa-circle-o-notch fa-spin" style="font-size:12px"></i>
             </button>
         </div>
 
@@ -72,12 +69,13 @@ export default {
                 study: window.sessionStorage.getItem('credentials') === null ? '' : JSON.parse(window.sessionStorage.getItem('credentials')).study
             },
             selectedEnv: {},
+            studySummaryList: [],
+            selectedStudy: {},
             error: ''
         }
     },
     computed: {
         envList: function () {
-            // return Object.keys(config.host);
             return Object.keys(config.host).map((x) => {
                 return {
                     value: x,
@@ -90,7 +88,26 @@ export default {
         onSelectEnv (item) {
             this.selectedEnv = item
             this.credentials.env = item.value;
-            console.log(this.credentials.env)
+
+            // change study summary list accordingly
+            this.updateStudySummaryList();
+        },
+        onSelectStudy (item) {
+            this.selectedStudy = item;
+            this.credentials.study = item.value;
+        },
+        updateStudySummaryList (env) {
+            return service.getStudySummaryList(this, env === undefined ? this.credentials.env : env).then((lst) => {
+                this.studySummaryList = lst.map((x) => {
+                    if (x.identifier === 'api') {
+                        this.onSelectStudy({ value: 'api', text: 'api' });
+                    }
+                    return {
+                        value: x.identifier,
+                        text: x.identifier
+                    }
+                });
+            })
         },
         submit () {
             this.loading = true;
@@ -112,7 +129,9 @@ export default {
         this.selectedEnv = {
             value: this.credentials.env,
             text: this.credentials.env
-        }
+        };
+        // default env
+        this.updateStudySummaryList(Object.keys(this.selectedEnv).length === 0 ? 'local' : undefined);
     }
 
 }

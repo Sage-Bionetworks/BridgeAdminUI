@@ -1,77 +1,88 @@
 <template>
     <div>
-        <div class="create-one">
-            <div class="admin-info ui form field">
-                <h2>Admin Information</h2>
+        <div class="create-one scrollbox">
+            <h3>Create Study</h3>
+            <div class="admin-info ui form">
+                <h3 class="ui dividing header">Admin Information</h3>
                 <label for="admin-list">Admin Accounts attached to this new Study</label>
                 <multi-select :options="adminList" :selected-options="selectedAdmins" @select="onSelectAdmins" id="admin-list"></multi-select>
             </div>
+
+            <br>
+
             <div class="study-info">
-                <h2>Study Information</h2>
+                <h3 class="ui dividing header">Study Information</h3>
                 <form class="ui form"> 
-                    <div class="form-group required field" :class="{'error': errors.has('study-id') }">
+                    <div class="field" :class="{'error': $v.study.identifier.$error }">
                         <label for="study-id">Study ID</label>
-                        <input type="text" class="form-control" name="study-id" v-model="study.identifier" v-validate:identifier.initial="'required|alpha_dash'" :class="{'input': true, 'error': errors.has('study-id') }">
-                        <p class="ui pointing red basic label" v-if="errors.has('study-id')">{{ errors.first('study-id') }}</p>
+                        <input type="text" @input="$v.study.identifier.$touch()" name="study-id" v-model="study.identifier">
+                        <p class="ui pointing red basic tiny label" v-if="!$v.study.identifier.required">ID is required</p>
                     </div>
-                    <div class="form-group required field" :class="{'error': errors.has('study-name') }">
+                    <div class="field" :class="{'error': $v.study.name.$error }">
                         <label for="study-name">Study Name</label>
-                        <input type="text" class="form-control" name="study-name" v-model="study.name" v-validate:name.initial="'required|alpha_dash'" :class="{'input': true, 'is-danger': errors.has('study-name') }">
-                        <p class="ui pointing red basic label" v-if="errors.has('study-name')">{{ errors.first('study-name') }}</p>
+                        <input type="text" @input="$v.study.name.$touch()" name="study-name" v-model="study.name" >
+                        <p class="ui pointing red basic tiny label" v-if="!$v.study.name.required">Name is required</p>
                     </div>
-                    <div class="form-group field" :class="{'error': errors.has('supportEmail') }">
+                    <div class="form-group field" :class="{'error': $v.study.supportEmail.$error }">
                         <label for="supportEmail">Support Email</label>
-                        <input type="email" class="form-control" name="supportEmail"  v-model="study.supportEmail" v-validate:email.initial="'required|email'" :class="{'input': true, 'is-danger': errors.has('supportEmail') }">
-                        <p class="ui pointing red basic label" v-if="errors.has('supportEmail')">{{ errors.first('supportEmail') }}</p>
+                        <input type="email" @input="$v.study.supportEmail.$touch()" name="supportEmail"  v-model="study.supportEmail">
+                        <p class="ui pointing red basic tiny label" v-if="!$v.study.supportEmail.required">Support Email is required</p>
+                        <p class="ui pointing red basic tiny label" v-if="!$v.study.supportEmail.email">Email is invalid</p>
                     </div>
-                    <div class="form-group field" :class="{'error': errors.has('consent-notification-email') }">
+                    <div class="form-group field" :class="{'error': $v.study.consentNotificationEmail.$error }">
                         <label for="consent-notification-email">Consent Notification Email</label>
-                        <input type="email" class="form-control" name="consent-notification-email" v-model="study.consentNotificationEmail" v-validate:email.initial="'required|email'" :class="{'input': true, 'is-danger': errors.has('email') }">
-                        <p class="ui pointing red basic label" v-if="errors.has('consent-notification-email')">{{ errors.first('consent-notification-email') }}</p>
+                        <input type="email" @input="$v.study.consentNotificationEmail.$touch()" name="consent-notification-email" v-model="study.consentNotificationEmail">
+                        <p class="ui pointing red basic tiny label" v-if="!$v.study.consentNotificationEmail.required">ID is required</p>
+                        <p class="ui pointing red basic tiny label" v-if="!$v.study.consentNotificationEmail.email">Email is invalid</p>
                     </div>
-                    <div class="form-group field" :class="{'error': errors.has('technicalEmail') }">
+                    <div class="form-group field" :class="{'error': $v.study.technicalEmail.$error }">
                         <label for="technicalEmail">Technical Email</label>
-                        <input type="email" class="form-control" name="technicalEmail"  v-model="study.technicalEmail" v-validate:email.initial="'required|email'" :class="{'input': true, 'is-danger': errors.has('technicalEmail') }">
-                        <p class="ui pointing red basic label" v-if="errors.has('technicalEmail')">{{ errors.first('technicalEmail') }}</p>
+                        <input type="email" @input="$v.study.technicalEmail.$touch()" name="technicalEmail"  v-model="study.technicalEmail">
+                        <p class="ui pointing red basic tiny label" v-if="!$v.study.technicalEmail.required">ID is required</p>
+                        <p class="ui pointing red basic tiny label" v-if="!$v.study.technicalEmail.email">Email is invalid</p>
                     </div>
 
-                    <div class="form-group field" :class="{'error': errors.has('sponsor-name') }">
+                    <div class="form-group field" :class="{'error': $v.study.sponsorName.$error }">
                         <label for="sponsor-name">Sponsor Name</label>
-                        <input type="text" name="sponsor-name" class="form-control" v-model="study.sponsorName" v-validate:name.initial="'required|alpha_dash'" :class="{'input': true, 'is-danger': errors.has('sponsor-name') }">
-                        <p class="ui pointing red basic label" v-if="errors.has('sponsor-name')">{{ errors.first('sponsor-name') }}</p>
+                        <input type="text" @input="$v.study.sponsorName.$touch()" class="form-control" v-model="study.sponsorName">
+                        <p class="ui pointing red basic tiny label" v-if="!$v.study.sponsorName.required">ID is required</p>
                     </div>
                 </form>
             </div>
+
+            <br>
+
             <div class="user-info">
-                <h2>Users Information</h2>
-                <div class="users" v-for="user in users">
+                <h3 class="ui dividing header">Users Information</h3>
+                <div class="users" v-for="(user, idx) in users">
                     <form class="ui form">
-                        <h3>User {{ users.indexOf(user) + 1 }}</h3>
-                        <div class="form-group field" :class="{'error': errors.has('user-email' + users.indexOf(user)) }">
-                            <label :for="'user-email' + users.indexOf(user)">Email address</label>
-                            <input type="email" class="form-control" :name="'user-email' + users.indexOf(user)" data-vv-as="User Email" v-model="user.email" v-validate:email.initial="'required|email'">
-                            <p class="ui pointing red basic label" v-if="errors.has('user-email' + users.indexOf(user))">{{ errors.first('user-email' + users.indexOf(user)) }}</p>
+                        <h3>User {{ idx + 1 }}</h3>
+                        <div class="field" :class="{'error': $v.users.$each[idx].email.$error }">
+                            <label :for="'user-email' + idx">Email address</label>
+                            <input type="email" @input="$v.users.$each[idx].email.$touch()" :name="'user-email' + idx" v-model="user.email">
+                            <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].email.required">Email is required</p>
+                            <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].email.email">Email is invalid</p>
                         </div>
-                        <div class="form-group field" :class="{'error': errors.has('first-name' + users.indexOf(user)) }">
-                            <label :for="'first-name' + users.indexOf(user)">First Name</label>
-                            <input type="text" :name="'first-name' + users.indexOf(user)" data-vv-as="First Name" v-model="user.first_name" class="form-control" v-validate:name.initial="'required|alpha_dash'">
-                            <p class="ui pointing red basic label" v-if="errors.has('first-name' + users.indexOf(user))">{{ errors.first('first-name' + users.indexOf(user)) }}</p>
+                        <div class="field" :class="{'error': $v.users.$each[idx].first_name.$error }">
+                            <label :for="'first-name' + idx">First Name</label>
+                            <input type="text" @input="$v.users.$each[idx].first_name.$touch()" :name="'first-name' + idx" v-model="user.first_name">
+                            <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].first_name.required">First Name is required</p>
                         </div>
-                        <div class="form-group field" :class="{'error': errors.has('last-name' + users.indexOf(user)) }">
-                            <label :for="'last-name' + users.indexOf(user)">Last Name</label>
-                            <input type="text" :name="'last-name' + users.indexOf(user)" data-vv-as="Last Name" v-model="user.last_name" class="form-control" v-validate:name.initial="'required|alpha_dash'">
-                            <p class="ui pointing red basic label" v-if="errors.has('last-name' + users.indexOf(user))">{{ errors.first('last-name' + users.indexOf(user)) }}</p>
+                        <div class="form-group field" :class="{'error': $v.users.$each[idx].last_name.$error }">
+                            <label :for="'last-name' + idx">Last Name</label>
+                            <input type="text" @input="$v.users.$each[idx].last_name.$touch()" :name="'last-name' + idx" v-model="user.last_name">
+                            <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].last_name.required">Last Name is required</p>
                         </div>
-                        <div class="form-group field">
-                            <label for="roles" :class="{ 'error': errors.has('checked') }">User Roles</label>
-                            <div class="form-check ui checkbox" id="roles">
-                                <input type="checkbox" class="form-check-input" v-model="user.role_researcher">
+                        <div class="field">
+                            <label for="roles">User Roles</label>
+                            <div class="ui checkbox" id="roles">
+                                <input type="checkbox" v-model="user.role_researcher">
                                 <label>
                                     Researcher
                                 </label>
                             </div>
-                            <div class="form-check ui checkbox" id="roles">
-                                <input type="checkbox" class="form-check-input" v-model="user.role_dev">
+                            <div class="ui checkbox" id="roles">
+                                <input type="checkbox" v-model="user.role_dev">
                                 <label class="form-check-label">
                                     Developer
                                 </label>
@@ -80,14 +91,14 @@
                     </form>  
                 </div>
 
-                <button @click="addUser()" class="ui blue tiny button" v-bind:class="{ disabled: loading }">
+                <br>
+
+                <button @click="addUser()" class="ui blue tiny button" v-bind:class="{ loading: loading, disabled: loading }">
                     Add More User
-                    <i v-if="loading" class="fa fa-circle-o-notch fa-spin" style="font-size:12px"></i>
                 </button>
 
-                <button @click="removeOneUser()" class="ui red tiny button" v-bind:class="{ disabled: loading }">
+                <button @click="removeOneUser()" class="ui red tiny button" v-bind:class="{ loading: loading, disabled: loading }">
                     Remove One User
-                    <i v-if="loading" class="fa fa-circle-o-notch fa-spin" style="font-size:12px"></i>
                 </button>
             </div>
         </div>
@@ -97,12 +108,10 @@
         <div class="ui error message" v-if="error">
             <p>{{ error }}</p>
         </div>
-        <i v-if="loading" class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i>
-        <button class="ui blue button" @click="validateForm()" v-bind:class="{ disabled: loading }">Create Study and User</button>
+        <button class="ui blue button" @click="validateForm()" v-bind:class="{ loading: loading, disabled: loading }">Create Study and User</button>
         <router-link to="/study-list">
             <button class="ui red button">
                 Cancel
-                <i v-if="loading" class="fa fa-circle-o-notch fa-spin" style="font-size:12px"></i>
             </button>
         </router-link>    
 
@@ -114,6 +123,7 @@
     import config from '../config';
     const crypto = require('crypto');
     import { MultiSelect } from 'vue-search-select'
+    import { required, email } from 'vuelidate/lib/validators'
 
     export default {
         components: {
@@ -150,6 +160,46 @@
                 ]
             }
         },
+        validations: {
+            study: {
+                identifier: {
+                    required
+                },
+                supportEmail: {
+                    required,
+                    email
+                },
+                consentNotificationEmail: {
+                    required,
+                    email
+                },
+                technicalEmail: {
+                    required,
+                    email
+                },
+                name: {
+                    required
+                },
+                sponsorName: {
+                    required
+                }
+            },
+
+            users: {
+                $each: {
+                    email: {
+                        required,
+                        email
+                    },
+                    first_name: {
+                        required
+                    },
+                    last_name: {
+                        required
+                    }
+                }
+            }
+        },
         computed: {
             adminList: function () {
                 return config.adminList;
@@ -158,9 +208,12 @@
         methods: {
             onSelectAdmins (items, lastSelectItem) {
                 this.selectedAdmins = items
-                console.log(items)
             },
             validateForm () {
+                this.$v.$touch();
+                if (this.$v.$error) {
+                    return;
+                }
                 this.error = '';
 
                 // validation
@@ -175,13 +228,10 @@
                         return;
                     }
                 }
-                this.$validator.validateAll().then(success => {
-                    if (!success) {
-                        return;
-                    }
-                    this.loading = true;
-                    this.onSubmit();
-                })
+
+                // finally create
+                this.loading = true;
+                this.onSubmit();
             },
             clearErrors () {
                 this.errors.clear();

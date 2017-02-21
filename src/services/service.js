@@ -3,10 +3,6 @@ import config from '../config';
 import store from '../store';
 import Vue from 'vue';
 
-// URL and endpoint constants
-const API_URL = 'http://localhost:9000';
-const LOGIN_URL = API_URL + config.signIn;
-// const SIGNUP_URL = API_URL + 'users/'
 const SESSION_KEY = 'session';
 
 let session = null;
@@ -21,7 +17,7 @@ export default {
     // Send a request to the login URL and save the returned JWT
     logIn (context, creds, redirect) {
         this.API_URL = config.host[creds.env];
-        return context.$http.post(LOGIN_URL, creds, (data) => {
+        return context.$http.post(this.API_URL + config.signIn, creds, (data) => {
             // context.error = '';
             data.studyName = creds.study;
             data.studyId = data.study;
@@ -67,7 +63,7 @@ export default {
             'study': study,
             'users': users
         };
-        return context.$http.post(API_URL + config.createStudyAndUsers, body).then(response => {
+        return context.$http.post(this.API_URL + config.createStudyAndUsers, body).then(response => {
             if (redirect) {
                 router.replace(redirect);
             }
@@ -77,7 +73,7 @@ export default {
     },
 
     getStudyList (context) {
-        return context.$http.get(API_URL + config.getStudyList).then(response => {
+        return context.$http.get(this.API_URL + config.getStudyList).then(response => {
             var data = response.data;
             store.commit('refreshStudyList', data.items);
         }).error((err) => {
@@ -85,8 +81,18 @@ export default {
         });
     },
 
+    getStudySummaryList (context, env) {
+        return context.$http.get(config.host[env] + config.getStudySummaryList).then(response => {
+            var data = response.data;
+            return data.items
+        }).error((err) => {
+            context.error = err;
+            return;
+        });
+    },
+
     getStudy (context, id) {
-        return context.$http.get(API_URL + config.getStudy + id).then(response => {
+        return context.$http.get(this.API_URL + config.getStudy + id).then(response => {
             var data = response.data;
             store.commit('changeCurrentStudy', data);
         }).error((err) => {
@@ -95,15 +101,36 @@ export default {
     },
 
     updateStudy (context, study) {
-        return context.$http.post(API_URL + config.updateStudy + study.identifier, study).then(response => {
+        console.log(study);
+        return context.$http.post(this.API_URL + config.updateStudy + study.identifier, study).then(response => {
             console.log('updated');
+            context.$refs.toastr.s('Study Updated.');
+        }).error((err) => {
+            context.error = err;
+            context.$refs.toastr.e(JSON.stringify(err));
+        });
+    },
+
+    deleteStudy (context, studyId, physical) {
+        return context.$http.delete(this.API_URL + config.updateStudy + studyId + '?' + 'physical=' + physical).then(response => {
+            console.log('delete');
         }).error((err) => {
             context.error = err;
         });
     },
 
-    deleteStudy (context, studyId, physical) {
-        return context.$http.delete(API_URL + config.updateStudy + studyId, physical).then(response => {
+    getCacheKeys (context) {
+        return context.$http.get(this.API_URL + config.getCacheKeys).then(response => {
+            console.log(response.data);
+            context.cacheKeys = response.data;
+        }).error((err) => {
+            context.error = err;
+        });
+    },
+
+    deleteKey (context, key) {
+        key = key.replace(':', '%3A'); // change colon to URI code
+        return context.$http.delete(this.API_URL + config.deleteCacheKey + key).then(response => {
             console.log('delete');
         }).error((err) => {
             context.error = err;

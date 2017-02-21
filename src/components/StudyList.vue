@@ -1,7 +1,7 @@
 <template>
     <div>
         <vue-toastr ref="toastr"></vue-toastr>
-        <div class="alert alert-danger" v-if="error">
+        <div class="ui negative message" v-if="error">
             <p>{{ error }}</p>
         </div>
         <div class="fixed-header">
@@ -25,10 +25,6 @@
             </div>
         </div>
 
-        <div v-if="$route.path === '/study-list/create-one'">
-            <h3>Create Study</h3>     
-        </div>
-
         <router-view></router-view>
 
         <div class="scrollbox" v-if="$route.path !== '/study-list/create-one'">
@@ -39,7 +35,10 @@
                 <thead>
                     <tr>
                         <th width="10">
-                            <input type="checkbox" class="ui checkbox" v-model="selectAll">
+                            <div class="ui fitted checkbox" id="roles">
+                                <input type="checkbox" v-model="selectAll">
+                                <label></label>
+                            </div>
                         </th>
                         <th>Name</th>
                         <th>Identifier</th>
@@ -48,7 +47,11 @@
                 </thead>
                 <tr v-for="study in studyList">
                     <td>
-                        <input type="checkbox" class="ui checkbox" v-model="selectedStudyIds" :value="study.identifier">
+                        <div class="ui fitted checkbox" id="roles">
+                            <input type="checkbox" v-model="selectedStudyIds" :value="study.identifier">
+                            <label></label>
+                        </div>
+                        <!-- <input type="checkbox" class="ui checkbox" v-model="selectedStudyIds" :value="study.identifier"> -->
                     </td>
                     <td>
                         <a v-on:click="changeCurrentStudy(study)">{{ study.name }}</a>
@@ -65,9 +68,6 @@
 
         <!-- Delete/Deactivate Study Modal Component -->
         <modal v-if="showDelete">
-            <div class="alert alert-danger" v-if="error">
-                <p>{{ error }}</p>
-            </div>
             <h3 slot="header">Delete Study</h3>
             <div slot="body">
                 <h4 v-if="this.selectedStudyIds.length === 1">Ready to delete: {{ this.selectedStudyIds[0] }}?</h4>
@@ -77,27 +77,23 @@
                 <button class="ui button" @click="showDelete = false">
                     Cancel
                 </button>
-                <button class="ui blue button" @click="deleteStudy(true)" :disabled="loading">
+                <button class="ui blue button" @click="deleteStudy(true)" :class="{ loading: loading, disabled: loading }">
                     Commit
-                    <i v-if="loading" class="fa fa-circle-o-notch fa-spin" style="font-size:12px"></i>
                 </button>
             </div>
         </modal>
         <modal v-if="showDeactivate">
-            <div class="alert alert-danger" v-if="error">
-                <p>{{ error }}</p>
-            </div>
             <h3 slot="header">Deactivate Study</h3>
             <div slot="body">
-                <h4>Ready to Deactivate: {{ this.selectedStudyIds[0] }} and other {{ this.selectedStudyIds.length - 1 }} studies?</h4>
+                <h4 v-if="this.selectedStudyIds.length === 1">Ready to deactivate: {{ this.selectedStudyIds[0] }}?</h4>
+                <h4 v-if="this.selectedStudyIds.length !== 1">Ready to deactivate: {{ this.selectedStudyIds[0] }} and other {{ this.selectedStudyIds.length - 1 }} studies?</h4>
             </div>
             <div slot="footer">
                 <button class="ui button" @click="showDeactivate = false">
                     Cancel
                 </button>
-                <button class="ui blue button" @click="deleteStudy(false)" :disabled="loading">
+                <button class="ui blue button" @click="deleteStudy(false)" :class="{ loading: loading, disabled: loading }">
                     Commit
-                    <i v-if="loading" class="fa fa-circle-o-notch fa-spin" style="font-size:12px"></i>
                 </button>
             </div>
         </modal>
@@ -111,11 +107,7 @@
     import { mapState } from 'vuex'
     export default {
         data () {
-            // We want to start with an existing time entry
             return {
-                // Start out with the existing entry
-                // by placing it in the array
-                // studyList: [],
                 showDeactivate: false,
                 showDelete: false,
                 loading: false,
@@ -147,11 +139,23 @@
                 router.replace('/settings');
             },
             deleteStudy (physical) {
-                console.log(this.selectedStudyIds);
+                console.log(physical);
+                // prevent user delete study api
+                if (this.selectedStudyIds.some(id => id === 'api')) {
+                    this.$refs.toastr.Add({
+                        title: 'Prevent Deletion',
+                        msg: JSON.stringify('Cannot delete/deactivate study api.'),
+                        clickClose: true,
+                        timeout: 0,
+                        position: 'toast-top-center',
+                        type: 'error'
+                    });
+                    return;
+                }
+
                 this.loading = true;
                 var cxt = this;
                 var errorStack = [];
-                var sutyIdsDeleted = [];
                 // async promise
                 var promise = new Promise(function (resolve, reject) {
                     var completeRequest = 0;
@@ -162,8 +166,6 @@
                                 errorStack.push(cxt.error);
                             } else {
                                 cxt.$refs.toastr.s(physical ? 'Study' + studyId + 'Deleted!' : 'Study' + studyId + 'Deactivated!');
-                                // remove deleted study in selected study list
-                                sutyIdsDeleted.push(studyId);
                             }
                             completeRequest++;
                             if (completeRequest === cxt.selectedStudyIds.length) {
@@ -180,10 +182,10 @@
                 promise.then(function (result) {
                     // remove all element already deleted in selectedStudyIds
                     cxt.selectedStudyIds = [];
-                    console.log(cxt.selectedStudyIds);
                     service.getStudyList(cxt).then(() => {
                         cxt.loading = false;
                         cxt.showDelete = false;
+                        cxt.showDeactivate = false;
                     });
                 }, function (err) {
                     console.log(err);
@@ -197,8 +199,6 @@
                     });
                     cxt.loading = false;
                 });
-
-                console.log(physical ? 'Delete study!' : 'Deactivate study!');
             }
         },
         route: {
@@ -215,5 +215,4 @@
 </script>
 
 <style>
-@import "../assets/general.scss";
 </style>

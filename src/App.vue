@@ -4,25 +4,31 @@
             <h2><i class="white heartbeat icon"></i> Bridge Admin</h2> 
         </header>
         <section>
-            <nav class="ui vertical menu">
-                <div class="tabset">
-                    <a class="active">Navigation</a>
-                </div>
-                <div class="item">
-                    <i class="settings icon"></i> Study Admin
-                    <div class="menu">
-                        <a><router-link to="/study-list" class="item" v-if="user">Study List</router-link></a>
-                        <a><router-link to="/cache" class="item" v-if="user">Cache Control</router-link></a>
+            <nav>
+                <div class="ui vertical menu">
+                    <div class="tabset">
+                        <a class="active">Navigation</a>
+                    </div>
+                    <div class="item">
+                        <i class="settings icon"></i> Study Admin
+                        <div class="menu">
+                            <a><router-link to="/study-list" class="item" v-if="user">Study List</router-link></a>
+                            <a><router-link to="/cache" class="item" v-if="user">Cache Control</router-link></a>
+                        </div>
+                    </div>
+                    <div class="item" v-if="user">
+                        <i class="sign out icon"></i> <a href="" @click="logOut()">Sign Out</a>
                     </div>
                 </div>
-                <div class="item" v-if="user">
-                    <i class="sign out icon"></i> <a href="" @click="logOut()">Sign Out</a>
-                </div>
+
             </nav>
-            <main class="col-md-8">
+            <main>
                 <router-view></router-view>
             </main>
         </section>
+        <footer>
+            <p>&copy; 2015-2016 Sage Bionetworks. </p>
+        </footer>
     </div>
 </template>
 

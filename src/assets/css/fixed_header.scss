@@ -2,6 +2,7 @@
 @import "./lib.scss";
 
 .fixed-header {
+    margin-right:0;
     .fixed-header-title {
         padding: 1rem 1rem 0 2rem;
         @include flex-box(row);
