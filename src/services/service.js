@@ -101,9 +101,7 @@ export default {
     },
 
     updateStudy (context, study) {
-        console.log(study);
         return context.$http.post(this.API_URL + config.updateStudy + study.identifier, study).then(response => {
-            console.log('updated');
             context.$refs.toastr.s('Study Updated.');
         }).error((err) => {
             context.error = err;
@@ -113,7 +111,6 @@ export default {
 
     deleteStudy (context, studyId, physical) {
         return context.$http.delete(this.API_URL + config.updateStudy + studyId + '?' + 'physical=' + physical).then(response => {
-            console.log('delete');
         }).error((err) => {
             context.error = err;
         });
@@ -121,7 +118,6 @@ export default {
 
     getCacheKeys (context) {
         return context.$http.get(this.API_URL + config.getCacheKeys).then(response => {
-            console.log(response.data);
             context.cacheKeys = response.data;
         }).error((err) => {
             context.error = err;
@@ -131,7 +127,6 @@ export default {
     deleteKey (context, key) {
         key = key.replace(':', '%3A'); // change colon to URI code
         return context.$http.delete(this.API_URL + config.deleteCacheKey + key).then(response => {
-            console.log('delete');
         }).error((err) => {
             context.error = err;
         });
