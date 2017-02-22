@@ -12,8 +12,7 @@
 
 /* HTML TAGS */
 html, body {
-    // overflow: hidden;
-    height: 100%
+    overflow: hidden;
 }
 body {
     @include flex-box(column);
@@ -34,12 +33,14 @@ main {
     padding: 0;
     overflow-y: auto;
 }
-    .scrollbox {
-        @include flex(1);
-        padding: 1.5rem;
-        overflow-y: auto;
-        margin:0;
-    }
+.scrollbox {
+    @include flex(1);
+    padding: 1.5rem;
+    overflow-y: auto;
+    height:84vh;
+    margin:0;
+
+}
 header {
     @include flex-box(row);
     @include align-items(top);
