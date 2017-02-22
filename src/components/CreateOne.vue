@@ -118,7 +118,7 @@
                 <ol>
                     <li>Click url in registration email from Synapse, follow instructions to signup a Synapse account, valid email address is needed;</li>
 
-                    <li>After signup, sign in the Synapse and click (<a :href="teanUrl">this page</a>) to see new Syanpse Team: {{ teamName }} related to this new Study;</li>
+                    <li>After signup, sign in the Synapse and click (<a :href="teanUrl">this page</a>) to see new Syanpse Team: <strong><i>{{ teamName }}</i></strong> related to this new Study;</li>
 
                     <li>Click ‘Request to Join Team’ to send a request to join this new team;</li>
                 </ol>
