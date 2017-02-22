@@ -44,7 +44,7 @@ export default {
     computed: mapState({ user: state => state.user }),
     methods: {
         logOut () {
-            service.logOut('/login');
+            service.logOut('/');
         }
     },
     mounted () {
