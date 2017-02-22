@@ -34,9 +34,9 @@ export default {
 
     // To log out, we just need to remove the token
     logOut (redirect) {
-        window.localStorage.removeItem(SESSION_KEY);
-        store.commit('refresh');
-        // router.replace(redirect);
+        // window.localStorage.removeItem(SESSION_KEY);
+        // store.commit('refresh');
+        router.replace(redirect);
     },
 
     checkAuth () {
