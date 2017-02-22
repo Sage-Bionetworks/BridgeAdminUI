@@ -3,7 +3,7 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-          <div class="alert alert-danger" v-if="error">
+          <div class="ui negative message" v-if="error">
               <p>{{ error }}</p>
           </div>
           <div class="modal-header">
