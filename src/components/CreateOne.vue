@@ -3,8 +3,12 @@
         <h3>Create Study</h3>
         <div class="admin-info ui form">
             <h3 class="ui dividing header">Admin Information</h3>
-            <label for="admin-list">Admin Accounts attached to this new Study</label>
-            <multi-select :options="adminList" :selected-options="selectedAdmins" @select="onSelectAdmins" id="admin-list"></multi-select>
+            <div class="field" :class="{ 'error': $v.selectedAdmins.$error }">
+                <label for="admin-list">Admin Accounts attached to this new Study</label>
+                <multi-select :options="adminList" :selected-options="selectedAdmins" @select="onSelectAdmins" id="admin-list"></multi-select>
+                <p class="ui pointing red basic tiny label" v-if="!$v.selectedAdmins.required && $v.selectedAdmins.$error">Must select at least one admin</p>   
+            </div>
+
         </div>
 
         <br>
@@ -12,39 +16,46 @@
         <div class="study-info">
             <h3 class="ui dividing header">Study Information</h3>
             <form class="ui form"> 
-                <div class="field" :class="{'error': $v.study.identifier.$error }">
-                    <label for="study-id">Study ID</label>
-                    <input type="text" @input="$v.study.identifier.$touch()" name="study-id" v-model="study.identifier">
-                    <p class="ui pointing red basic tiny label" v-if="!$v.study.identifier.required">ID is required</p>
-                </div>
-                <div class="field" :class="{'error': $v.study.name.$error }">
-                    <label for="study-name">Study Name</label>
-                    <input type="text" @input="$v.study.name.$touch()" name="study-name" v-model="study.name" >
-                    <p class="ui pointing red basic tiny label" v-if="!$v.study.name.required">Name is required</p>
-                </div>
-                <div class="form-group field" :class="{'error': $v.study.supportEmail.$error }">
-                    <label for="supportEmail">Support Email</label>
-                    <input type="email" @input="$v.study.supportEmail.$touch()" name="supportEmail"  v-model="study.supportEmail">
-                    <p class="ui pointing red basic tiny label" v-if="!$v.study.supportEmail.required">Support Email is required</p>
-                    <p class="ui pointing red basic tiny label" v-if="!$v.study.supportEmail.email">Email is invalid</p>
-                </div>
-                <div class="form-group field" :class="{'error': $v.study.consentNotificationEmail.$error }">
-                    <label for="consent-notification-email">Consent Notification Email</label>
-                    <input type="email" @input="$v.study.consentNotificationEmail.$touch()" name="consent-notification-email" v-model="study.consentNotificationEmail">
-                    <p class="ui pointing red basic tiny label" v-if="!$v.study.consentNotificationEmail.required">ID is required</p>
-                    <p class="ui pointing red basic tiny label" v-if="!$v.study.consentNotificationEmail.email">Email is invalid</p>
-                </div>
-                <div class="form-group field" :class="{'error': $v.study.technicalEmail.$error }">
-                    <label for="technicalEmail">Technical Email</label>
-                    <input type="email" @input="$v.study.technicalEmail.$touch()" name="technicalEmail"  v-model="study.technicalEmail">
-                    <p class="ui pointing red basic tiny label" v-if="!$v.study.technicalEmail.required">ID is required</p>
-                    <p class="ui pointing red basic tiny label" v-if="!$v.study.technicalEmail.email">Email is invalid</p>
+                <div class="two fields">
+                    <div class="field" :class="{'error': $v.study.identifier.$error }">
+                        <label for="study-id">Study ID</label>
+                        <input type="text" @input="$v.study.identifier.$touch()" name="study-id" v-model="study.identifier">
+                        <p class="ui pointing red basic tiny label" v-if="!$v.study.identifier.required && $v.study.identifier.$error">ID is required</p>
+                    </div>
+                    <div class="field" :class="{'error': $v.study.name.$error }">
+                        <label for="study-name">Study Name</label>
+                        <input type="text" @input="$v.study.name.$touch()" name="study-name" v-model="study.name" >
+                        <p class="ui pointing red basic tiny label" v-if="!$v.study.name.required && $v.study.name.$error">Name is required</p>
+                    </div>                    
                 </div>
 
-                <div class="form-group field" :class="{'error': $v.study.sponsorName.$error }">
-                    <label for="sponsor-name">Sponsor Name</label>
-                    <input type="text" @input="$v.study.sponsorName.$touch()" class="form-control" v-model="study.sponsorName">
-                    <p class="ui pointing red basic tiny label" v-if="!$v.study.sponsorName.required">ID is required</p>
+                <div class="two fields">
+                    <div class="field" :class="{'error': $v.study.consentNotificationEmail.$error }">
+                        <label for="consent-notification-email">Consent Notification Email</label>
+                        <input type="email" @input="$v.study.consentNotificationEmail.$touch()" name="consent-notification-email" v-model="study.consentNotificationEmail">
+                        <p class="ui pointing red basic tiny label" v-if="!$v.study.consentNotificationEmail.required && $v.study.consentNotificationEmail.$error">ID is required</p>
+                        <p class="ui pointing red basic tiny label" v-if="!$v.study.consentNotificationEmail.email && $v.study.consentNotificationEmail.$error">Email is invalid</p>
+                    </div>
+                    <div class="form-group field" :class="{'error': $v.study.technicalEmail.$error }">
+                        <label for="technicalEmail">Technical Email</label>
+                        <input type="email" @input="$v.study.technicalEmail.$touch()" name="technicalEmail"  v-model="study.technicalEmail">
+                        <p class="ui pointing red basic tiny label" v-if="!$v.study.technicalEmail.required && $v.study.technicalEmail.$error">ID is required</p>
+                        <p class="ui pointing red basic tiny label" v-if="!$v.study.technicalEmail.email && $v.study.technicalEmail.$error">Email is invalid</p>
+                    </div> 
+                </div>
+
+                <div class="two fields">
+                    <div class="form-group field" :class="{'error': $v.study.supportEmail.$error }">
+                        <label for="supportEmail">Support Email</label>
+                        <input type="email" @input="$v.study.supportEmail.$touch()" name="supportEmail"  v-model="study.supportEmail">
+                        <p class="ui pointing red basic tiny label" v-if="!$v.study.supportEmail.required && $v.study.supportEmail.$error">Support Email is required</p>
+                        <p class="ui pointing red basic tiny label" v-if="!$v.study.supportEmail.email && $v.study.supportEmail.$error">Email is invalid</p>
+                    </div>
+                    <div class="form-group field" :class="{'error': $v.study.sponsorName.$error }">
+                        <label for="sponsor-name">Sponsor Name</label>
+                        <input type="text" @input="$v.study.sponsorName.$touch()" class="form-control" v-model="study.sponsorName">
+                        <p class="ui pointing red basic tiny label" v-if="!$v.study.sponsorName.required && $v.study.sponsorName.$error">ID is required</p>
+                    </div>
                 </div>
             </form>
         </div>
@@ -59,20 +70,24 @@
                     <div class="field" :class="{'error': $v.users.$each[idx].email.$error }">
                         <label :for="'user-email' + idx">Email address</label>
                         <input type="email" @input="$v.users.$each[idx].email.$touch()" :name="'user-email' + idx" v-model="user.email">
-                        <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].email.required">Email is required</p>
-                        <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].email.email">Email is invalid</p>
+                        <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].email.required && $v.users.$each[idx].email.$error">Email is required</p>
+                        <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].email.email && $v.users.$each[idx].email.$error">Email is invalid</p>
                     </div>
-                    <div class="field" :class="{'error': $v.users.$each[idx].first_name.$error }">
-                        <label :for="'first-name' + idx">First Name</label>
-                        <input type="text" @input="$v.users.$each[idx].first_name.$touch()" :name="'first-name' + idx" v-model="user.first_name">
-                        <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].first_name.required">First Name is required</p>
+
+                    <div class="two fields">
+                        <div class="field" :class="{'error': $v.users.$each[idx].first_name.$error }">
+                            <label :for="'first-name' + idx">First Name</label>
+                            <input type="text" @input="$v.users.$each[idx].first_name.$touch()" :name="'first-name' + idx" v-model="user.first_name">
+                            <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].first_name.required && $v.users.$each[idx].first_name.$error">First Name is required</p>
+                        </div>
+                        <div class="field" :class="{'error': $v.users.$each[idx].last_name.$error }">
+                            <label :for="'last-name' + idx">Last Name</label>
+                            <input type="text" @input="$v.users.$each[idx].last_name.$touch()" :name="'last-name' + idx" v-model="user.last_name">
+                            <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].last_name.required && $v.users.$each[idx].last_name.$error">Last Name is required</p>
+                        </div>
                     </div>
-                    <div class="form-group field" :class="{'error': $v.users.$each[idx].last_name.$error }">
-                        <label :for="'last-name' + idx">Last Name</label>
-                        <input type="text" @input="$v.users.$each[idx].last_name.$touch()" :name="'last-name' + idx" v-model="user.last_name">
-                        <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].last_name.required">Last Name is required</p>
-                    </div>
-                    <div class="field">
+
+                    <div class="field" :class="{ error: !user.role_researcher && !user.role_dev }">
                         <label for="roles">User Roles</label>
                         <div class="ui checkbox" id="roles">
                             <input type="checkbox" v-model="user.role_researcher">
@@ -86,6 +101,7 @@
                                 Developer
                             </label>
                         </div>
+                        <p class="ui left pointing red basic tiny label" v-if="!user.role_researcher && !user.role_dev">Must specify at least one role</p>
                     </div>
                 </form>  
             </div>
@@ -196,6 +212,9 @@
             }
         },
         validations: {
+            selectedAdmins: {
+                required
+            },
             study: {
                 identifier: {
                     required
@@ -255,12 +274,6 @@
                     return;
                 }
                 this.error = '';
-
-                // validation
-                if (this.selectedAdmins.length === 0) {
-                    this.error = 'Must select at least one admin account.';
-                    return;
-                }
 
                 for (var user in this.users) {
                     if (!this.users[user].role_researcher && !this.users[user].role_dev) {

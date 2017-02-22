@@ -51,7 +51,6 @@
                             <input type="checkbox" v-model="selectedStudyIds" :value="study.identifier">
                             <label></label>
                         </div>
-                        <!-- <input type="checkbox" class="ui checkbox" v-model="selectedStudyIds" :value="study.identifier"> -->
                     </td>
                     <td>
                         <a v-on:click="changeCurrentStudy(study)">{{ study.name }}</a>

@@ -5,7 +5,7 @@ var projectRoot = path.resolve(__dirname, '../')
 
 module.exports = {
   entry: {
-    app: './src/main.js'
+    app: ['./src/main.js']
   },
   output: {
     path: config.build.assetsRoot,
@@ -62,10 +62,10 @@ module.exports = {
         loader: 'file-loader'
       },
       {
-        test: /\.(png|jpe?g|gif|svg)(\?\S*)?$/,
+        test: /\.(png|jpe?g|ico|gif|svg)(\?\S*)?$/,
         loader: 'file-loader',
         query: {
-          name: '[name].[ext]?[hash]'
+          name: '[name].[ext]'
         }
       },
       {
@@ -76,14 +76,14 @@ module.exports = {
         test: /\.html$/,
         loader: 'vue-html'
       },
-      {
-        test: /\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf)(\?.*)?$/,
-        loader: 'url',
-        query: {
-          limit: 10000,
-          name: path.join(config.build.assetsSubDirectory, '[name].[ext]?[hash:7]')
-        }
-      },
+      // {
+      //   test: /\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf)(\?.*)?$/,
+      //   loader: 'url',
+      //   query: {
+      //     limit: 10000,
+      //     name: path.join(config.build.assetsSubDirectory, '[name].[ext]?[hash:7]')
+      //   }
+      // },
       {
         test: /\.scss$/,
         loaders: 'style-loader!css-loader!sass-loader!'

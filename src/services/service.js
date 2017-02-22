@@ -36,7 +36,7 @@ export default {
     logOut (redirect) {
         window.localStorage.removeItem(SESSION_KEY);
         store.commit('refresh');
-        // router.replace(redirect);
+        router.replace(redirect);
     },
 
     checkAuth () {
