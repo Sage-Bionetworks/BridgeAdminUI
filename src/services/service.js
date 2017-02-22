@@ -9,16 +9,9 @@ let session = null;
 
 export default {
 
-    // User object will let us check authentication status
-    user: {
-        authenticated: false
-    },
-
-    // Send a request to the login URL and save the returned JWT
     logIn (context, creds, redirect) {
         this.API_URL = config.host[creds.env];
         return context.$http.post(this.API_URL + config.signIn, creds, (data) => {
-            // context.error = '';
             data.studyName = creds.study;
             data.studyId = data.study;
             window.localStorage.setItem(SESSION_KEY, JSON.stringify(data));
@@ -27,8 +20,6 @@ export default {
             // create common headers
             Vue.http.headers.common['Content-Type'] = 'application/json';
             Vue.http.headers.common['Bridge-Session'] = session.sessionToken;
-
-            this.user.authenticated = true;
 
             store.commit('refresh');
 
