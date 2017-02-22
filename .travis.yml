@@ -1,0 +1,30 @@
+language: node_js
+node_js:
+    - "7.2.1"
+script:
+    - webpack -p
+deploy:
+    - provider: s3
+      access_key_id: ${AWS_KEY}
+      secret_access_key: ${AWS_SECRET_KEY}
+      bucket: "admin-staging.sagebridge.org"
+      skip_cleanup: true
+      acl: public_read
+      detect_encoding: false
+      endpoint: admin-staging.sagebridge.org.s3-website-us-west-2.amazonaws.com
+      region: "us-west-2"
+      local_dir: app
+      on:
+          branch: develop
+    - provider: s3
+      access_key_id: ${AWS_KEY}
+      secret_access_key: ${AWS_SECRET_KEY}
+      bucket: "admin.sagebridge.org"
+      skip_cleanup: true
+      acl: public_read
+      detect_encoding: false
+      endpoint: admin.sagebridge.org.s3-website-us-west-2.amazonaws.com
+      region: "us-west-2"
+      local_dir: app
+      on:
+          branch: release
