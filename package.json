@@ -1,6 +1,6 @@
 {
   "name": "Bridge-Admin-App",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Bridge Admin App used to manage Study in Bridge.",
   "author": "Zhizhen LIN <zhizhen.lin@sagebase.org>",
   "scripts": {
