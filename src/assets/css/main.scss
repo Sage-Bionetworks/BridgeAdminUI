@@ -23,7 +23,6 @@ body {
 section {
     @include flex-box(row);
     @include flex(1);
-    /* FF BUG FIX: http://stackoverflow.com/questions/32911324/vertical-scroll-rendering-issue-in-flexbox-in-firefox 2 lines */
     min-width: 0;
     min-height: 0;
 }
