@@ -27,6 +27,7 @@ export var router = new VueRouter({
     mode: 'history',
     base: __dirname,
     routes: [
+        { path: '/', component: LogIn },
         { path: '/login', component: LogIn },
         { path: '/study-list', component: StudyList,
             children: [
