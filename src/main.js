@@ -15,6 +15,7 @@ import Modal from './components/Modal.vue';
 import Vuelidate from 'vuelidate'
 
 require('vue-toastr/src/vue-toastr.less');
+require('../static/favicon.ico');
 
 Vue.use(VueResource)
 Vue.use(VueRouter)
