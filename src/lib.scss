@@ -1,0 +1,57 @@
+@mixin gradient($fromColor, $fromPercent, $toColor, $toPercent) {
+    background-image: linear-gradient(90deg, $fromColor $fromPercent, $toColor $toPercent);
+    background-image: -moz-linear-gradient(left, $fromColor $fromPercent, $toColor $toPercent);
+    background-image: -webkit-linear-gradient(left, $fromColor $fromPercent, $toColor $toPercent);
+    background-image: -ms-linear-gradient(left, $fromColor $fromPercent, $toColor $toPercent);
+}
+@mixin flex-box($direction) {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    -webkit-flex-direction: $direction;
+    -ms-flex-direction: $direction;
+    display: flex;
+    flex-direction: $direction;
+}
+@mixin flex($weight) {
+    -webkit-flex: $weight;
+    -webkit-box-flex: $weight;
+    -ms-flex: $weight;
+    flex: $weight;
+}
+@mixin flex-wrap() {
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+@mixin order($order) {
+    -webkit-order: $order;
+    order: $order;
+}
+@mixin align-items($pos) {
+    -webkit-align-items: $pos;
+    align-items: $pos;
+}
+@mixin justify-content($pos) {
+    -webkit-justify-content: $pos;
+    justify-content: $pos;
+}
+@mixin align-content($pos) {
+    -webkit-align-content: $pos;
+    align-content: $pos;
+}
+@mixin transform($trans) {
+    -webkit-transform: $trans;
+    transform: $trans;
+}
+@mixin transition($trans) {
+    -webkit-transition: $trans;
+    transition: $trans;
+}
+@mixin backface-visibility($var) {
+    -webkit-backface-visibility: $var;
+    backface-visibility: $var;
+}
+@mixin user-select($var) {
+    -webkit-user-select: $var;
+    user-select: $var;
+}

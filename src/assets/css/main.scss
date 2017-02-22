@@ -1,0 +1,215 @@
+@import "./lib.scss";
+@import "./forms.scss";
+@import "./dialog.scss";
+@import "./nav.scss";
+@import "./panel.scss";
+@import "./survey.scss";
+@import "./schema.scss";
+@import "./schedules.scss";
+@import "./pager.scss";
+@import "./fixed_header.scss";
+@import "./json.scss";
+
+/* HTML TAGS */
+html, body {
+    // overflow: hidden;
+    height: 100%
+}
+body {
+    @include flex-box(column);
+    @include transition(opacity .5s ease-in-out);
+    background-color: white;
+    opacity: 1.0;
+}
+section {
+    @include flex-box(row);
+    @include flex(1);
+    /* FF BUG FIX: http://stackoverflow.com/questions/32911324/vertical-scroll-rendering-issue-in-flexbox-in-firefox 2 lines */
+    min-width: 0;
+    min-height: 0;
+}
+main {
+    @include flex(1);
+    @include flex-box(column);
+    padding: 0;
+    overflow-y: auto;
+}
+    .scrollbox {
+        @include flex(1);
+        padding: 1.5rem;
+        overflow-y: auto;
+        margin:0;
+    }
+header {
+    @include flex-box(row);
+    @include align-items(top);
+    @include justify-content(space-between);
+    @include gradient(rgb(52, 152, 219), 41%, rgb(41, 128, 185), 100%);
+}
+    header.dev {
+        @include gradient(orange, 41%, #B22222, 100%);
+    }
+    header i {
+        font-size: 2rem!important;
+    }
+    header h2 {
+        font-variant: small-caps;
+        letter-spacing: 2px;
+        color: white;
+        padding: 1rem 2rem 0rem 1.5rem;
+    }
+    .header-env {
+        font-size: 1.25rem!important;
+        padding: 1.5rem 2rem 0rem 0rem;
+        color: white;
+    }
+.scrollbox dd {
+    margin: 1rem;
+}
+footer p {
+    border-top: 1px solid #e5e5e5;
+    padding: .5rem;
+    text-align: center;
+}
+
+/* GENERAL */
+
+.no_records td {
+    font-size: larger;
+    padding: 1rem!important;
+    text-align: center!important;
+}
+.public-key {
+    font-family:monospace;
+    white-space:pre;
+    height: 20rem;
+    overflow-y:scroll;
+}
+.vertical-padding {
+    margin: 0 0 .5rem 0;
+}
+.action.item {
+    margin-right: 1rem;
+}
+.link, .inline-editor-controls a {
+    color: #4183c4!important;
+    cursor: pointer;
+}
+.red {
+    color:#db2828
+}
+
+/* participant_consents */
+.signature-container {
+    margin:0!important;
+    padding:0!important;
+    
+    .signature {
+        background-size: contain;
+        background-position:center;
+        background-repeat:no-repeat;
+        /* Native size: 156x311px */
+        height: 11.7rem!important;
+        width: 23.3rem!important;
+    }
+}
+
+.message {
+    ol {
+        margin: 0!important;
+        padding: 0!important;
+        margin-left:1rem!important;
+    }
+    li {
+        margin: 1rem 0;
+    }
+}
+
+progress {
+    width: 100%;
+}
+    .progress-status {
+        display: flex; 
+        justify-content: 
+        space-between; width:100%;
+    }
+        .progress-status-perc {
+             padding-left:3rem;
+        }
+
+.modal {
+    .actions {
+        text-align:left ! important;
+    }
+}
+.identifier-emphasis {
+    font-family: monospace;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    background-color: white;
+    padding: 0 .25rem;    
+}
+/* For forms if you hide the first div.field, there's weird padding. This removes it. 
+    Usage example: data-bind="css:{'noLeftPadding': !isNewObs()}"
+*/
+.noLeftPadding {
+    padding-left: 0!important;
+}
+
+.nav-content {
+    position: absolute;
+    right: 0rem;
+    color: #bbb;
+    cursor:pointer!important;
+}
+
+/* Used to position the green/orange label next to version number in secondary menu. */
+.pub-status {
+    .item:first-child {
+        padding-right: 0 !important;
+    }
+    .item:not(:first-child) {
+        padding-left: .25rem !important;
+    }
+}
+
+/* This didn't use to be misaligned, but looks wrong now. */
+.ui.compact.table {
+    .ui.checkbox {
+        vertical-align: middle;
+    }
+    .curtail-overflow {
+        max-width: 200px; 
+        text-overflow: ellipsis; 
+        overflow: hidden;
+    }
+}
+.hasBorder td {
+    border-bottom: 1px solid #ccc;
+}
+.disabled a {
+    opacity: .7;
+}
+/* External Identifiers page controls, there's a primary button dropdown with poor icon spacing */
+.ui.small.button.dropdown {
+    padding-right: .5rem;
+    i.icon {
+        margin-left: .5rem;
+    } 
+}
+.ui.mini.label {
+    padding: .4rem .8rem!important;
+    margin-bottom: -.1rem!important;
+}
+
+.non-breaking-rows td, .non-breaking-rows th {
+    white-space: nowrap;
+
+    .error-message {
+        position:absolute;
+        margin: .5rem .5rem 0 1rem;
+    }
+}
+.upload-id {
+    font-family: monospace;
+}

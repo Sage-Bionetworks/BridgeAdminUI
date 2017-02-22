@@ -54,6 +54,10 @@ module.exports = {
         loader: 'style-loader!css-loader'
       },
       {
+        test: /\.less$/,
+        loader: 'style!css!less'
+      },
+      {
         test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
         loader: 'file-loader'
       },
@@ -79,13 +83,22 @@ module.exports = {
           limit: 10000,
           name: path.join(config.build.assetsSubDirectory, '[name].[ext]?[hash:7]')
         }
+      },
+      {
+        test: /\.scss$/,
+        loaders: 'style-loader!css-loader!sass-loader!'
       }
     ]
   },
   vue: {
-    loaders: cssLoaders()
+    loaders: {
+      scss: 'style!css!sass'
+    }
   },
   eslint: {
     formatter: require('eslint-friendly-formatter')
+  },
+  sassLoader: {
+    includePaths: [path.resolve(__dirname, './some-folder')]
   }
 }

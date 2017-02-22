@@ -1,216 +1,322 @@
 <template>
-  <div>
-    <div class="create-one">
-      <div class="admin-info">
-        <h2>Admin Information</h2>
-          <div class="form-group">
+    <div class="create-one scrollbox">
+        <h3>Create Study</h3>
+        <div class="admin-info ui form">
+            <h3 class="ui dividing header">Admin Information</h3>
             <label for="admin-list">Admin Accounts attached to this new Study</label>
-            <select multiple class="form-control" id="admin-list" v-model="selectedAdmins">
-              <option v-for="(value, key) in adminList" v-bind:value="value">
-                {{ key }}
-              </option>
-            </select>
-          </div>
-      </div>
-      <div class="study-info">
-        <h2>Study Information</h2>
-        <form> 
-          <div class="form-group" :class="{'has-error': errors.has('study-id') }">
-            <label for="study-id">Study ID</label>
-            <input type="identifier" class="form-control" name="study-id" v-model="study.identifier" v-validate:identifier.initial="'required|alpha_dash'" :class="{'input': true, 'is-danger': errors.has('study-id') }">
-            <p class="text-danger" v-if="errors.has('study-id')">{{ errors.first('study-id') }}</p>
-          </div>
-          <div class="form-group" :class="{'has-error': errors.has('study-name') }">
-            <label for="study-name">Study Name</label>
-            <input type="name" class="form-control" name="study-name" v-model="study.name" v-validate:name.initial="'required|alpha_dash'" :class="{'input': true, 'is-danger': errors.has('study-name') }">
-            <p class="text-danger" v-if="errors.has('study-name')">{{ errors.first('study-name') }}</p>
-          </div>
-          <div class="form-group" :class="{'has-error': errors.has('supportEmail') }">
-            <label for="supportEmail">Support Email</label>
-            <input type="email" class="form-control" name="supportEmail"  v-model="study.supportEmail" v-validate:email.initial="'required|email'" :class="{'input': true, 'is-danger': errors.has('supportEmail') }">
-            <p class="text-danger" v-if="errors.has('supportEmail')">{{ errors.first('supportEmail') }}</p>
-          </div>
-          <div class="form-group" :class="{'has-error': errors.has('consent-notification-email') }">
-            <label for="consent-notification-email">Consent Notification Email</label>
-            <input type="email" class="form-control" name="consent-notification-email" v-model="study.consentNotificationEmail" v-validate:email.initial="'required|email'" :class="{'input': true, 'is-danger': errors.has('email') }">
-            <p class="text-danger" v-if="errors.has('consent-notification-email')">{{ errors.first('consent-notification-email') }}</p>
-          </div>
-          <div class="form-group" :class="{'has-error': errors.has('technicalEmail') }">
-            <label for="technicalEmail">Technical Email</label>
-            <input type="email" class="form-control" name="technicalEmail"  v-model="study.technicalEmail" v-validate:email.initial="'required|email'" :class="{'input': true, 'is-danger': errors.has('technicalEmail') }">
-            <p class="text-danger" v-if="errors.has('technicalEmail')">{{ errors.first('technicalEmail') }}</p>
-          </div>
-
-          <div class="form-group" :class="{'has-error': errors.has('sponsor-name') }">
-            <label for="sponsor-name">Sponsor Name</label>
-            <input type="name" name="sponsor-name" class="form-control" v-model="study.sponsorName" v-validate:name.initial="'required|alpha_dash'" :class="{'input': true, 'is-danger': errors.has('sponsor-name') }">
-            <p class="text-danger" v-if="errors.has('sponsor-name')">{{ errors.first('sponsor-name') }}</p>
-          </div>
-        </form>
-      </div>
-      <div class="user-info">
-        <h2>Users Information</h2>
-
-        <div class="users" v-for="user in users">
-          <form>
-            <h3>User {{ users.indexOf(user) + 1 }}</h3>
-            <div class="form-group" :class="{'has-error': errors.has('user-email') }">
-              <label for="user-email">Email address</label>
-              <input type="email" class="form-control" name="user-email" v-model="user.email" v-validate:email.initial="'required|email'" :class="{'input': true, 'is-danger': errors.has('user-email') }">
-              <p class="text-danger" v-if="errors.has('user-email')">{{ errors.first('user-email') }}</p>
-            </div>
-            <div class="form-group" :class="{'has-error': errors.has('first-name') }">
-              <label for="first-name">First Name</label>
-              <input type="name" name="first-name" v-model="user.first_name" class="form-control" v-validate:name.initial="'required|alpha_dash'" :class="{'input': true, 'is-danger': errors.has('first-name') }">
-              <p class="text-danger" v-if="errors.has('first-name')">{{ errors.first('first-name') }}</p>
-            </div>
-            <div class="form-group" :class="{'has-error': errors.has('last-name') }">
-              <label for="last-name">Last Name</label>
-              <input type="name" name="last-name" v-model="user.last_name" class="form-control" v-validate:name.initial="'required|alpha_dash'" :class="{'input': true, 'is-danger': errors.has('last-name') }">
-              <p class="text-danger" v-if="errors.has('last-name')">{{ errors.first('last-name') }}</p>
-            </div>
-            <div class="form-group">
-              <label for="roles" :class="{ 'error': errors.has('checked') }">User Roles</label>
-              <div class="form-check" id="roles">
-                <label class="form-check-label">
-                  <input type="checkbox" class="form-check-input" v-model="user.role_researcher">
-                  Researcher
-                </label>
-              </div>
-              <div class="form-check" id="roles">
-                <label class="form-check-label">
-                  <input type="checkbox" class="form-check-input" v-model="user.role_dev">
-                  Developer
-                </label>
-              </div>
-            </div>
-          </form>  
+            <multi-select :options="adminList" :selected-options="selectedAdmins" @select="onSelectAdmins" id="admin-list"></multi-select>
         </div>
 
-        <button @click="addUser()" class="btn btn-primary" v-bind:class="{ disabled: loading }">
-          Add More User
-        </button>
+        <br>
 
-        <button @click="removeOneUser()" class="btn btn-danger" v-bind:class="{ disabled: loading }">
-          Remove One User
-        </button>
+        <div class="study-info">
+            <h3 class="ui dividing header">Study Information</h3>
+            <form class="ui form"> 
+                <div class="field" :class="{'error': $v.study.identifier.$error }">
+                    <label for="study-id">Study ID</label>
+                    <input type="text" @input="$v.study.identifier.$touch()" name="study-id" v-model="study.identifier">
+                    <p class="ui pointing red basic tiny label" v-if="!$v.study.identifier.required">ID is required</p>
+                </div>
+                <div class="field" :class="{'error': $v.study.name.$error }">
+                    <label for="study-name">Study Name</label>
+                    <input type="text" @input="$v.study.name.$touch()" name="study-name" v-model="study.name" >
+                    <p class="ui pointing red basic tiny label" v-if="!$v.study.name.required">Name is required</p>
+                </div>
+                <div class="form-group field" :class="{'error': $v.study.supportEmail.$error }">
+                    <label for="supportEmail">Support Email</label>
+                    <input type="email" @input="$v.study.supportEmail.$touch()" name="supportEmail"  v-model="study.supportEmail">
+                    <p class="ui pointing red basic tiny label" v-if="!$v.study.supportEmail.required">Support Email is required</p>
+                    <p class="ui pointing red basic tiny label" v-if="!$v.study.supportEmail.email">Email is invalid</p>
+                </div>
+                <div class="form-group field" :class="{'error': $v.study.consentNotificationEmail.$error }">
+                    <label for="consent-notification-email">Consent Notification Email</label>
+                    <input type="email" @input="$v.study.consentNotificationEmail.$touch()" name="consent-notification-email" v-model="study.consentNotificationEmail">
+                    <p class="ui pointing red basic tiny label" v-if="!$v.study.consentNotificationEmail.required">ID is required</p>
+                    <p class="ui pointing red basic tiny label" v-if="!$v.study.consentNotificationEmail.email">Email is invalid</p>
+                </div>
+                <div class="form-group field" :class="{'error': $v.study.technicalEmail.$error }">
+                    <label for="technicalEmail">Technical Email</label>
+                    <input type="email" @input="$v.study.technicalEmail.$touch()" name="technicalEmail"  v-model="study.technicalEmail">
+                    <p class="ui pointing red basic tiny label" v-if="!$v.study.technicalEmail.required">ID is required</p>
+                    <p class="ui pointing red basic tiny label" v-if="!$v.study.technicalEmail.email">Email is invalid</p>
+                </div>
 
-      </div>
+                <div class="form-group field" :class="{'error': $v.study.sponsorName.$error }">
+                    <label for="sponsor-name">Sponsor Name</label>
+                    <input type="text" @input="$v.study.sponsorName.$touch()" class="form-control" v-model="study.sponsorName">
+                    <p class="ui pointing red basic tiny label" v-if="!$v.study.sponsorName.required">ID is required</p>
+                </div>
+            </form>
+        </div>
+
+        <br>
+
+        <div class="user-info">
+            <h3 class="ui dividing header">Users Information</h3>
+            <div class="users" v-for="(user, idx) in users">
+                <form class="ui form">
+                    <h3>User {{ idx + 1 }}</h3>
+                    <div class="field" :class="{'error': $v.users.$each[idx].email.$error }">
+                        <label :for="'user-email' + idx">Email address</label>
+                        <input type="email" @input="$v.users.$each[idx].email.$touch()" :name="'user-email' + idx" v-model="user.email">
+                        <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].email.required">Email is required</p>
+                        <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].email.email">Email is invalid</p>
+                    </div>
+                    <div class="field" :class="{'error': $v.users.$each[idx].first_name.$error }">
+                        <label :for="'first-name' + idx">First Name</label>
+                        <input type="text" @input="$v.users.$each[idx].first_name.$touch()" :name="'first-name' + idx" v-model="user.first_name">
+                        <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].first_name.required">First Name is required</p>
+                    </div>
+                    <div class="form-group field" :class="{'error': $v.users.$each[idx].last_name.$error }">
+                        <label :for="'last-name' + idx">Last Name</label>
+                        <input type="text" @input="$v.users.$each[idx].last_name.$touch()" :name="'last-name' + idx" v-model="user.last_name">
+                        <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].last_name.required">Last Name is required</p>
+                    </div>
+                    <div class="field">
+                        <label for="roles">User Roles</label>
+                        <div class="ui checkbox" id="roles">
+                            <input type="checkbox" v-model="user.role_researcher">
+                            <label>
+                                Researcher
+                            </label>
+                        </div>
+                        <div class="ui checkbox" id="roles">
+                            <input type="checkbox" v-model="user.role_dev">
+                            <label class="form-check-label">
+                                Developer
+                            </label>
+                        </div>
+                    </div>
+                </form>  
+            </div>
+
+            <br>
+
+            <button @click="addUser()" class="ui blue tiny button" v-bind:class="{ loading: loading, disabled: loading }">
+                Add More User
+            </button>
+
+            <button @click="removeOneUser()" class="ui red tiny button" v-bind:class="{ loading: loading, disabled: loading }">
+                Remove One User
+            </button>
+        </div>
+
+        <br>
+
+        <div class="email-template">
+            <h3 class="ui dividing header">Email Template</h3>
+
+            <p><strong>This is the email sent to users requesting them to join Synapse Team when they sign up for your study. </strong></p>
+
+            <div class="ui message">
+                <p>Hi, </p>
+
+                <p>Thank you for creating a new Study. </p>
+
+                <p>This research study is powered by Bridge, a secure data storage service operated by Sage Bionetworks. In order to proceed, you must first create a Synapse account and request to join new Synapse Team related to new Study. Following are detailed steps:</p>
+
+                <ol>
+                    <li>Click url in registration email from Synapse, follow instructions to signup a Synapse account, valid email address is needed;</li>
+
+                    <li>After signup, sign in the Synapse and click (<a :href="teanUrl">this page</a>) to see new Syanpse Team: {{ teamName }} related to this new Study;</li>
+
+                    <li>Click ‘Request to Join Team’ to send a request to join this new team;</li>
+                </ol>
+
+                <p>Our Study manager will accept the join request shortly. Then you will be able to get access to the new Synapse Team and new Synapse Project related to this new Study.</p>
+
+                <br>
+
+                <p>For general information about Synapse, Project and Team, refer to <a :href="synapseDocs">this docs</a>.</p>
+                <p>For general inquiries or to request support with your account, please email bridgeit@sagebase.org</p>
+
+                <br>
+
+                <p>Regards,</p>
+
+                <p>The Bridge Team</p>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="ui error message" v-if="error">
+            <p>{{ error }}</p>
+        </div>
+        <button class="ui blue button" @click="validateForm()" v-bind:class="{ loading: loading, disabled: loading }">Create Study and User</button>
+        <router-link to="/study-list">
+            <button class="ui red button">
+                Cancel
+            </button>
+        </router-link>  
     </div>
-
-    <hr>
-    <div class="alert alert-danger" v-if="error">
-      <p>{{ error }}</p>
-    </div>
-    <i v-if="loading" class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i>
-    <button class="btn btn-primary" @click="validateForm()" v-bind:class="{ disabled: loading }">Create Study and User</button>
-    <router-link to="/create-study"><button class="btn btn-danger">Cancel</button></router-link>    
-
-  </div>
 </template>
 
 <script>
-  import service from '../services/service'
-  import config from '../config'
-  const crypto = require('crypto')
+    import service from '../services/service';
+    import config from '../config';
+    const crypto = require('crypto');
+    import { MultiSelect } from 'vue-search-select'
+    import { required, email } from 'vuelidate/lib/validators'
 
-  export default {
-    data () {
-      return {
-        loading: false,
-        error: '',
-        email: '',
-        name: '',
-        phone: '',
-        url: '',
-        fakeemail: 'vermilion.lin@gmail.com',
-        selectedAdmins: [],
-        study: {
-          identifier: '',
-          supportEmail: '',
-          consentNotificationEmail: '',
-          technicalEmail: '',
-          name: '',
-          sponsorName: '',
-          active: 'true'
+    export default {
+        components: {
+            MultiSelect
         },
-        users: [
-          {
-            email: '',
-            first_name: '',
-            last_name: '',
-            password: crypto.randomBytes(8).toString('hex') + 'A=', // generate random password for each user
-            role_researcher: false,
-            role_dev: false
-          }
-        ]
-      }
-    },
-    computed: {
-      adminList: function () {
-        return config.adminList
-      }
-    },
-    methods: {
-      validateForm () {
-        this.error = ''
+        data () {
+            return {
+                loading: false,
+                error: '',
+                email: '',
+                name: '',
+                phone: '',
+                url: '',
+                fakeemail: 'vermilion.lin@gmail.com',
+                selectedAdmins: [],
+                study: {
+                    identifier: '',
+                    supportEmail: '',
+                    consentNotificationEmail: '',
+                    technicalEmail: '',
+                    name: '',
+                    sponsorName: '',
+                    active: 'true'
+                },
+                users: [
+                    {
+                        email: '',
+                        first_name: '',
+                        last_name: '',
+                        password: crypto.randomBytes(8).toString('hex') + 'A=', // generate random password for each user
+                        role_researcher: false,
+                        role_dev: false
+                    }
+                ],
+                synapseDocs: 'http://docs.synapse.org/articles/getting_started.html'
+            }
+        },
+        validations: {
+            study: {
+                identifier: {
+                    required
+                },
+                supportEmail: {
+                    required,
+                    email
+                },
+                consentNotificationEmail: {
+                    required,
+                    email
+                },
+                technicalEmail: {
+                    required,
+                    email
+                },
+                name: {
+                    required
+                },
+                sponsorName: {
+                    required
+                }
+            },
+            users: {
+                $each: {
+                    email: {
+                        required,
+                        email
+                    },
+                    first_name: {
+                        required
+                    },
+                    last_name: {
+                        required
+                    }
+                }
+            }
+        },
+        computed: {
+            adminList: function () {
+                return config.adminList;
+            },
+            teamName: function () {
+                return this.study.name.trim().replace(/\s/g, '_') + 'AccessTeam';
+            },
+            teanUrl: function () {
+                return 'https://www.synapse.org/#!TeamSearch:' + this.teamName;
+            }
+        },
+        methods: {
+            onSelectAdmins (items, lastSelectItem) {
+                this.selectedAdmins = items
+            },
+            validateForm () {
+                this.$v.$touch();
+                if (this.$v.$error) {
+                    return;
+                }
+                this.error = '';
 
-        // validation
-        if (this.selectedAdmins.length === 0) {
-          this.error = 'Must select at least one admin account.'
-          return
-        }
+                // validation
+                if (this.selectedAdmins.length === 0) {
+                    this.error = 'Must select at least one admin account.';
+                    return;
+                }
 
-        for (var user in this.users) {
-          if (!this.users[user].role_researcher && !this.users[user].role_dev) {
-            this.error = 'Must select at least one role'
-            return
-          }
+                for (var user in this.users) {
+                    if (!this.users[user].role_researcher && !this.users[user].role_dev) {
+                        this.error = 'Must select at least one role';
+                        return;
+                    }
+                }
+
+                // finally create
+                this.loading = true;
+                this.onSubmit();
+            },
+            clearErrors () {
+                this.errors.clear();
+            },
+            onSubmit () {
+                // change roles to list
+                for (var user in this.users) {
+                    var roles = [];
+                    if (this.users[user].role_researcher) {
+                        roles.push('RESEARCHER');
+                    }
+                    if (this.users[user].role_dev) {
+                        roles.push('DEVELOPER');
+                    }
+                    this.users[user].roles = roles;
+                }
+
+                // extract value as list from selectedAdmins
+                var selectedAdminIds = this.selectedAdmins.map((x) => {
+                    return x.value;
+                })
+                service.createStudyAndUsers(this, selectedAdminIds, this.study, this.users).then(() => {
+                    if (!this.error) {
+                        this.$parent.$refs.toastr.s('Study Created!');
+                        service.getStudyList(this.$parent);
+                    } else {
+                        this.$parent.$refs.toastr.e('Error Occurred!');
+                    }
+                    this.loading = false;
+                });
+            },
+            addUser () {
+                let user = {
+                    email: '',
+                    first_name: '',
+                    last_name: '',
+                    password: crypto.randomBytes(8).toString('hex') + 'A=',
+                    role_researcher: false,
+                    role_dev: false
+                }
+                this.users.push(user);
+            },
+            removeOneUser () {
+                this.users.pop();
+            }
         }
-        this.$validator.validateAll().then(success => {
-          if (!success) {
-            return
-          }
-          this.loading = true
-          this.onSubmit()
-        })
-      },
-      clearErrors () {
-        this.errors.clear()
-      },
-      onSubmit () {
-        // change roles to list
-        for (var user in this.users) {
-          var roles = []
-          if (this.users[user].role_researcher) {
-            roles.push('RESEARCHER')
-          }
-          if (this.users[user].role_dev) {
-            roles.push('DEVELOPER')
-          }
-          this.users[user].roles = roles
-        }
-        service.createStudyAndUser(this, this.selectedAdmins, this.study, this.users, '/create-study').then(() => {
-          this.loading = false
-        })
-      },
-      addUser () {
-        let user = {
-          email: '',
-          first_name: '',
-          last_name: '',
-          password: crypto.randomBytes(8).toString('hex') + 'A=',
-          role_researcher: false,
-          role_dev: false
-        }
-        this.users.push(user)
-      },
-      removeOneUser () {
-        this.users.pop()
-      }
     }
-  }
 </script>
-
-<style>
-</style>
