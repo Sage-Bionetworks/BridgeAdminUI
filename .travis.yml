@@ -13,7 +13,7 @@ deploy:
       detect_encoding: false
       endpoint: admin-staging.sagebridge.org.s3-website-us-west-2.amazonaws.com
       region: "us-west-2"
-      local_dir: src
+      local_dir: dist
       on:
           branch: develop
     - provider: s3
@@ -25,6 +25,6 @@ deploy:
       detect_encoding: false
       endpoint: admin.sagebridge.org.s3-website-us-west-2.amazonaws.com
       region: "us-west-2"
-      local_dir: src
+      local_dir: dist
       on:
           branch: release
