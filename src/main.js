@@ -41,15 +41,15 @@ export var router = new VueRouter({
     ]
 })
 
-router.beforeEach(({meta, path}, from, next) => {
-    var { auth = true } = meta;
-    var isLogin = Boolean(store.state.user);
+// router.beforeEach(({meta, path}, from, next) => {
+//     var { auth = true } = meta;
+//     var isLogin = Boolean(store.state.user);
 
-    if (auth && !isLogin && path !== '/login') {
-        return next({ path: '/login' });
-    }
-    next();
-})
+//     if (auth && !isLogin && path !== '/login') {
+//         return next({ path: '/login' });
+//     }
+//     next();
+// })
 
 // Make sure to inject the router.
 /* eslint-disable no-new */

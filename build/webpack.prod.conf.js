@@ -43,7 +43,7 @@ module.exports = merge(baseWebpackConfig, {
         ? 'index.html'
         : config.build.index,
       template: 'index.html',
-      favicon: '../static/favicon.ico',
+      favicon: 'static/favicon.ico',
       inject: true,
       minify: {
         removeComments: true,
