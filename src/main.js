@@ -47,6 +47,15 @@ router.beforeEach(({meta, path}, from, next) => {
     next();
 })
 
+Vue.http.interceptors.push(function (request, next) {
+  // modify headers
+  request.headers.set('Content-Type', 'application/json');
+  request.headers.set('Bridge-Session', store.state.user.sessionToken);
+
+  // continue to next interceptor
+  next();
+});
+
 // Make sure to inject the router.
 /* eslint-disable no-new */
 new Vue({
