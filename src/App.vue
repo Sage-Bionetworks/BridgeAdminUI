@@ -2,6 +2,11 @@
     <div id="app">
         <header class="dev"> 
             <h2><i class="white heartbeat icon"></i> Bridge Admin</h2> 
+            <div class="header-env">
+                <span>{{ user? user.studyName : '' }}</span>
+                <span> on </span>
+                <span>{{ user? user.environment : '' }}</span>
+            </div>
         </header>
         <section>
             <nav>
@@ -16,11 +21,19 @@
                             <a><router-link to="/cache" class="item" v-if="user">Cache Control</router-link></a>
                         </div>
                     </div>
+
+                    <div class="item" v-if="user">
+                        <i class="server icon"></i> Study Data Admin
+                        <div class="menu">
+                            <a><router-link to="/schema-list" class="item">Data Schemas</router-link></a>
+                            <a><router-link to="/survey-list" class="item">Surveys</router-link></a>
+                        </div>
+                    </div>
+
                     <div class="item" v-if="user">
                         <i class="sign out icon"></i> <a href="" @click="logOut()">Sign Out</a>
                     </div>
                 </div>
-
             </nav>
             <main>
                 <router-view></router-view>
