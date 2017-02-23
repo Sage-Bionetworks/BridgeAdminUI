@@ -42,6 +42,23 @@
                         <label>Enable Bridge management of external IDs</label>
                     </div>
                 </div>
+                <div class="field">
+                    <label>Require external ID on sign up</label>
+                    <div class="ui checkbox">
+                        <input type="checkbox" class="ui checkbox" v-bind:checked="currentStudy === undefined? false : currentStudy.externalIdRequiredOnSignup" v-model="currentStudy === undefined? '' : currentStudy.externalIdRequiredOnSignup">
+                        <label>External ID is required when user submits initial sign up</label>
+                    </div>
+                </div>
+
+                <h4>Notifications</h4>
+                <div class="field">
+                    <label>iOS Platform ARN</label>
+                    <input style="width:40rem" type="text" v-model="pushNotificationARNs['iPhone OS']"/>
+                </div>
+                <div class="field">
+                    <label>Android Platform ARN</label>
+                    <input style="width:40rem" type="text" v-model="pushNotificationARNs['Android']"/>
+                </div>
             </form>
         </div>
     </div>
@@ -58,7 +75,10 @@
                 loading: false
             }
         },
-        computed: mapState({ currentStudy: state => state.currentStudy }),
+        computed: mapState({
+            currentStudy: state => state.currentStudy,
+            pushNotificationARNs: state => state.currentStudy.pushNotificationARNs
+        }),
         methods: {
             updateStudy () {
                 this.loading = true;

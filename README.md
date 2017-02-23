@@ -5,6 +5,7 @@
 ```bash
 npm install
 npm run dev
+npm run build
 ```
 
 The app will be served at `localhost:3030`.
