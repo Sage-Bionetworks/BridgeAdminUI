@@ -6,7 +6,6 @@ import CreateOne from './components/CreateOne.vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import store from './store'
-import VueSelect from 'vue-select'
 import Settings from './components/Settings.vue'
 import Cache from './components/Cache.vue'
 import Toastr from 'vue-toastr';
@@ -19,7 +18,6 @@ require('../static/favicon.ico');
 Vue.use(VueResource)
 Vue.use(VueRouter)
 Vue.use(Vuelidate)
-Vue.component('v-select', VueSelect)
 Vue.component('vue-toastr', Toastr);
 Vue.component('modal', Modal);
 
