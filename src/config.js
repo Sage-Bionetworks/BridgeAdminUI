@@ -30,5 +30,9 @@ module.exports = {
     getStudyList: '/v3/studies',
     getStudySummaryList: '/v3/studies?summary=true',
     getCacheKeys: '/v3/cache',
-    deleteCacheKey: '/v3/cache/'
+    deleteCacheKey: '/v3/cache/',
+    getSurveyList: '/v3/surveys',
+    deleteSurvey: '/v3/surveys/',
+    getSchemaList: '/v3/uploadschemas',
+    deleteSchema: '/v3/uploadschemas/'
 }
