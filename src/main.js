@@ -22,7 +22,6 @@ Vue.component('vue-toastr', Toastr);
 Vue.component('modal', Modal);
 
 export var router = new VueRouter({
-    mode: 'history',
     base: __dirname,
     routes: [
         { path: '/', component: LogIn },
