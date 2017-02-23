@@ -32,11 +32,12 @@ main {
     padding: 0;
     overflow-y: auto;
 }
+
 .scrollbox {
     @include flex(1);
     padding: 1.5rem;
     overflow-y: auto;
-    height:84vh;
+    height:83vh;
     margin:0;
 
 }
