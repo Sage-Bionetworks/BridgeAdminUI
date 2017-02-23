@@ -38,7 +38,7 @@
                     v-model="credentials.password"
                 >
             </div>
-            <div class="three wide field" :class="{ disabled: loading }">
+            <div class="three wide field" :class="{ disabled: loading || studyListLoading }">
                 <basic-select id="studyList" :options="studySummaryList" :selected-option="selectedStudy" @select="onSelectStudy"></basic-select>
             </div>
             <button class="ui primary button" @click="submit()" v-bind:class="{ loading: loading, disabled: loading }">
@@ -61,12 +61,14 @@ export default {
     data () {
         return {
             loading: false,
+            studyListLoading: false,
             showModal: false,
             credentials: {
                 env: window.sessionStorage.getItem('credentials') === null ? '' : JSON.parse(window.sessionStorage.getItem('credentials')).env,
                 email: window.sessionStorage.getItem('credentials') === null ? '' : JSON.parse(window.sessionStorage.getItem('credentials')).email,
                 password: window.sessionStorage.getItem('credentials') === null ? '' : JSON.parse(window.sessionStorage.getItem('credentials')).password,
-                study: window.sessionStorage.getItem('credentials') === null ? '' : JSON.parse(window.sessionStorage.getItem('credentials')).study
+                study: window.sessionStorage.getItem('credentials') === null ? '' : JSON.parse(window.sessionStorage.getItem('credentials')).study,
+                studyName: window.sessionStorage.getItem('credentials') === null ? '' : JSON.parse(window.sessionStorage.getItem('credentials')).studyName
             },
             selectedEnv: {},
             studySummaryList: [],
@@ -95,16 +97,19 @@ export default {
         onSelectStudy (item) {
             this.selectedStudy = item;
             this.credentials.study = item.value;
+            this.credentials.studyName = item.text;
         },
         updateStudySummaryList (env) {
+            this.studyListLoading = true;
             return service.getStudySummaryList(this, env === undefined ? this.credentials.env : env).then((lst) => {
+                this.studyListLoading = false;
                 this.studySummaryList = lst.map((x) => {
                     if (x.identifier === 'api') {
-                        this.onSelectStudy({ value: 'api', text: 'api' });
+                        this.onSelectStudy({ value: 'api', text: 'Test Study' });
                     }
                     return {
                         value: x.identifier,
-                        text: x.identifier
+                        text: x.name
                     }
                 });
             })
@@ -115,11 +120,11 @@ export default {
                 env: this.credentials.env,
                 email: this.credentials.email,
                 password: this.credentials.password,
-                study: this.credentials.study
+                study: this.credentials.study,
+                studyName: this.credentials.studyName
             }
             window.sessionStorage.setItem('credentials', JSON.stringify(credentials));
-            // We need to pass the component's this context
-            // to properly make use of http in the auth service
+
             service.logIn(this, credentials, '/study-list').then(() => {
                 this.loading = false;
             })

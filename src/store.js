@@ -10,9 +10,16 @@ export default new Vuex.Store({
         user: undefined,
         API_BASE: '',
         currentStudy: undefined,
-        studyList: []
+        studyList: [],
+        surveyList: [],
+        schemaList: []
     },
     mutations: {
+        logOut (state) {
+            // clean all states
+            state.user = state.currentStudy = state.API_BASE = '';
+            state.studyList = state.surveyList = state.schemaList = [];
+        },
         refresh (state, user) {
             state.user = user;
         },
@@ -24,6 +31,12 @@ export default new Vuex.Store({
         },
         updateBase (state, newBase) {
             state.API_BASE = newBase;
+        },
+        refreshSurveyList (state, surveyList) {
+            state.surveyList = surveyList;
+        },
+        refreshSchemaList (state, schemaList) {
+            state.schemaList = schemaList;
         }
     }
 })

@@ -8,8 +8,9 @@ export default {
         store.commit('updateBase', config.host[creds.env]);
         return context.$http.post(store.state.API_BASE + config.signIn, creds).then(response => {
             var data = response.data;
-            data.studyName = creds.study;
-            data.studyId = data.study;
+
+            data.studyName = creds.studyName;
+            data.studyId = creds.study;
             store.commit('refresh', data);
 
             // Redirect to a specified route
@@ -21,9 +22,8 @@ export default {
         });
     },
 
-    // To log out, we just need to remove the token
     logOut (redirect) {
-        store.commit('refresh', '');
+        store.commit('logOut');
         router.replace(redirect);
     },
 
@@ -97,6 +97,43 @@ export default {
     deleteKey (context, key) {
         key = key.replace(':', '%3A'); // change colon to URI code
         return context.$http.delete(store.state.API_BASE + config.deleteCacheKey + key).then(response => {
+        }, err => {
+            context.error = err;
+        });
+    },
+
+    getSurveyList (context) {
+        return context.$http.get(store.state.API_BASE + config.getSurveyList).then(response => {
+            var data = response.data;
+            store.commit('refreshSurveyList', data.items);
+        }, err => {
+            context.error = err;
+        });
+    },
+
+    deleteSurvey (context, surveyKeys, physical) {
+        var guid = surveyKeys.guid;
+        var createdOn = surveyKeys.createdOn;
+        var deleteApi = guid + '/revisions/' + createdOn + '?' + 'physical=' + physical;
+        return context.$http.delete(store.state.API_BASE + config.deleteSurvey + deleteApi).then(response => {
+        }, err => {
+            context.error = err;
+        });
+    },
+
+    getSchemaList (context) {
+        return context.$http.get(store.state.API_BASE + config.getSchemaList).then(response => {
+            var data = response.data;
+            store.commit('refreshSchemaList', data.items);
+        }, err => {
+            context.error = err;
+        });
+    },
+
+    deleteSchema (context, schemaId) {
+        var currentStudyId = store.state.user.studyId;
+        var deleteSchemaApi = config.updateStudy + currentStudyId + '/uploadschemas/' + schemaId;
+        return context.$http.delete(store.state.API_BASE + deleteSchemaApi).then(response => {
         }, err => {
             context.error = err;
         });

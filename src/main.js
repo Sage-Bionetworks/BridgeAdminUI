@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import LogIn from './components/LogIn.vue'
 import StudyList from './components/StudyList.vue'
+import SurveyList from './components/SurveyList.vue'
+import SchemaList from './components/SchemaList.vue'
 import CreateOne from './components/CreateOne.vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
@@ -30,6 +32,8 @@ export var router = new VueRouter({
             children: [
                 { path: 'create-one', component: CreateOne }
             ]},
+        { path: '/survey-list', component: SurveyList },
+        { path: '/schema-list', component: SchemaList },
         { path: '/settings', component: Settings },
         { path: '/cache', component: Cache },
         { path: '*', redirect: '/' }
