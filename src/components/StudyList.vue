@@ -138,7 +138,6 @@
                 router.replace('/settings');
             },
             deleteStudy (physical) {
-                console.log(physical);
                 // prevent user delete study api
                 if (this.selectedStudyIds.some(id => id === 'api')) {
                     this.$refs.toastr.Add({
@@ -198,13 +197,6 @@
                     });
                     cxt.loading = false;
                 });
-            }
-        },
-        route: {
-            // Check the users auth status before
-            // allowing navigation to the route
-            canActivate () {
-                return service.checkAuth();
             }
         },
         created () {

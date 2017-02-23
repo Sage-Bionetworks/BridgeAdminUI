@@ -1,51 +1,30 @@
 import {router} from '../main';
 import config from '../config';
 import store from '../store';
-import Vue from 'vue';
-
-const SESSION_KEY = 'session';
-
-let session = null;
 
 export default {
 
     logIn (context, creds, redirect) {
-        this.API_URL = config.host[creds.env];
-        return context.$http.post(this.API_URL + config.signIn, creds, (data) => {
+        store.commit('updateBase', config.host[creds.env]);
+        return context.$http.post(store.state.API_BASE + config.signIn, creds).then(response => {
+            var data = response.data;
             data.studyName = creds.study;
             data.studyId = data.study;
-            window.localStorage.setItem(SESSION_KEY, JSON.stringify(data));
-            session = data;
-
-            // create common headers
-            Vue.http.headers.common['Content-Type'] = 'application/json';
-            Vue.http.headers.common['Bridge-Session'] = session.sessionToken;
-
-            store.commit('refresh');
+            store.commit('refresh', data);
 
             // Redirect to a specified route
             if (redirect) {
                 router.replace(redirect);
             }
-        }).error((err) => {
+        }, err => {
             context.error = err;
         });
     },
 
     // To log out, we just need to remove the token
     logOut (redirect) {
-        window.localStorage.removeItem(SESSION_KEY);
-        store.commit('refresh');
+        store.commit('refresh', '');
         router.replace(redirect);
-    },
-
-    checkAuth () {
-        var jwt = JSON.parse(window.localStorage.getItem(SESSION_KEY));
-        if (jwt) {
-            return true;
-        } else {
-            return false;
-        }
     },
 
     createStudyAndUsers (context, adminIds, study, users, redirect) {
@@ -54,20 +33,20 @@ export default {
             'study': study,
             'users': users
         };
-        return context.$http.post(this.API_URL + config.createStudyAndUsers, body).then(response => {
+        return context.$http.post(store.state.API_BASE + config.createStudyAndUsers, body).then(response => {
             if (redirect) {
                 router.replace(redirect);
             }
-        }).error((err) => {
+        }, err => {
             context.error = err;
         });
     },
 
     getStudyList (context) {
-        return context.$http.get(this.API_URL + config.getStudyList).then(response => {
+        return context.$http.get(store.state.API_BASE + config.getStudyList).then(response => {
             var data = response.data;
             store.commit('refreshStudyList', data.items);
-        }).error((err) => {
+        }, err => {
             context.error = err;
         });
     },
@@ -76,49 +55,49 @@ export default {
         return context.$http.get(config.host[env] + config.getStudySummaryList).then(response => {
             var data = response.data;
             return data.items
-        }).error((err) => {
+        }, err => {
             context.error = err;
             return;
         });
     },
 
     getStudy (context, id) {
-        return context.$http.get(this.API_URL + config.getStudy + id).then(response => {
+        return context.$http.get(store.state.API_BASE + config.getStudy + id).then(response => {
             var data = response.data;
             store.commit('changeCurrentStudy', data);
-        }).error((err) => {
+        }, err => {
             context.error = err;
         });
     },
 
     updateStudy (context, study) {
-        return context.$http.post(this.API_URL + config.updateStudy + study.identifier, study).then(response => {
+        return context.$http.post(store.state.API_BASE + config.updateStudy + study.identifier, study).then(response => {
             context.$refs.toastr.s('Study Updated.');
-        }).error((err) => {
+        }, err => {
             context.error = err;
             context.$refs.toastr.e(JSON.stringify(err));
         });
     },
 
     deleteStudy (context, studyId, physical) {
-        return context.$http.delete(this.API_URL + config.updateStudy + studyId + '?' + 'physical=' + physical).then(response => {
-        }).error((err) => {
+        return context.$http.delete(store.state.API_BASE + config.updateStudy + studyId + '?' + 'physical=' + physical).then(response => {
+        }, err => {
             context.error = err;
         });
     },
 
     getCacheKeys (context) {
-        return context.$http.get(this.API_URL + config.getCacheKeys).then(response => {
+        return context.$http.get(store.state.API_BASE + config.getCacheKeys).then(response => {
             context.cacheKeys = response.data;
-        }).error((err) => {
+        }, err => {
             context.error = err;
         });
     },
 
     deleteKey (context, key) {
         key = key.replace(':', '%3A'); // change colon to URI code
-        return context.$http.delete(this.API_URL + config.deleteCacheKey + key).then(response => {
-        }).error((err) => {
+        return context.$http.delete(store.state.API_BASE + config.deleteCacheKey + key).then(response => {
+        }, err => {
             context.error = err;
         });
     }

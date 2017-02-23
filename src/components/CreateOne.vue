@@ -161,7 +161,7 @@
         </div>
         <button class="ui blue button" @click="validateForm()" v-bind:class="{ loading: loading, disabled: loading }">Create Study and User</button>
         <router-link to="/study-list">
-            <button class="ui red button">
+            <button class="ui red button" v-bind:class="{ loading: loading, disabled: loading }">
                 Cancel
             </button>
         </router-link>  
