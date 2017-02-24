@@ -18,6 +18,10 @@ module.exports = {
           { value: '273979', text: 'Brian_Bot' },
           { value: '273984', text: 'Mike_Kellen' }
     ],
+    rolesList: [
+        { value: 'role_researcher', text: 'Researcher' },
+        { value: 'role_dev', text: 'Developer' }
+    ],
     studies: {
     },
     signIn: '/v3/auth/signIn',

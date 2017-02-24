@@ -4,6 +4,12 @@
         <div class="fixed-header">
             <div class="fixed-header-title">
                 <div class="fixed-header-heading">
+                    <div class="ui breadcrumb">
+                        <router-link to="/study-list">
+                            <a class="section">Studies</a>
+                            <i class="right chevron icon divider"></i>
+                        </router-link>
+                    </div> 
                     <h3>Admin Settings for Study: {{ currentStudy.name }}</h3> 
                 </div>
                 <div class="fixed-header-buttons">
