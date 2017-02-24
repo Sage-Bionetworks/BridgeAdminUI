@@ -28,10 +28,8 @@ export var router = new VueRouter({
     routes: [
         { path: '/', component: LogIn },
         { path: '/login', component: LogIn },
-        { path: '/study-list', component: StudyList,
-            children: [
-                { path: 'create-one', component: CreateOne }
-            ]},
+        { path: '/study-list', component: StudyList },
+        { path: '/create-study', component: CreateOne },
         { path: '/survey-list', component: SurveyList },
         { path: '/schema-list', component: SchemaList },
         { path: '/settings', component: Settings },
