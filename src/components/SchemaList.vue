@@ -124,7 +124,7 @@
                             if (cxt.error) {
                                 errorStack.push(cxt.error);
                             } else {
-                                cxt.$refs.toastr.s('Schema' + schemaId + 'Deleted!');
+                                cxt.$refs.toastr.s('Schema ' + schemaId + ' Deleted!');
                             }
                             completeRequest++;
                             if (completeRequest === cxt.selectedSchemaIds.length) {

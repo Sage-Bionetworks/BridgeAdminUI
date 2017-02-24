@@ -147,7 +147,7 @@
                             if (cxt.error) {
                                 errorStack.push(cxt.error);
                             } else {
-                                cxt.$refs.toastr.s(physical ? 'Survey' + surveyKeys + 'Deleted!' : 'Survey' + surveyKeys + 'Deactivated!');
+                                cxt.$refs.toastr.s(physical ? 'Survey ' + surveyKeys + ' Deleted!' : 'Survey ' + surveyKeys + ' Deactivated!');
                             }
                             completeRequest++;
                             if (completeRequest === cxt.selectedSurveyGuidsWithCreatedOns.length) {
