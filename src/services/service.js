@@ -38,7 +38,7 @@ export default {
                 router.replace(redirect);
             }
         }, err => {
-            context.error = err;
+            context.error = err.body;
         });
     },
 

@@ -25,8 +25,6 @@
             </div>
         </div>
 
-        <!-- <router-view></router-view> -->
-
         <div class="scrollbox" v-if="$route.path !== '/study-list/create-one'">
 
             <p v-if="studyList.length === 0"><strong>Loading Studies...</strong></p>
@@ -163,7 +161,7 @@
                             if (cxt.error) {
                                 errorStack.push(cxt.error);
                             } else {
-                                cxt.$refs.toastr.s(physical ? 'Study' + studyId + 'Deleted!' : 'Study' + studyId + 'Deactivated!');
+                                cxt.$refs.toastr.s(physical ? 'Study ' + studyId + ' Deleted!' : 'Study ' + studyId + ' Deactivated!');
                             }
                             completeRequest++;
                             if (completeRequest === cxt.selectedStudyIds.length) {
