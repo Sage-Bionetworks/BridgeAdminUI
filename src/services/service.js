@@ -18,7 +18,7 @@ export default {
                 router.replace(redirect);
             }
         }, err => {
-            context.error = err;
+            context.error = err.body;
         });
     },
 
@@ -74,8 +74,8 @@ export default {
         return context.$http.post(store.state.API_BASE + config.updateStudy + study.identifier, study).then(response => {
             context.$refs.toastr.s('Study Updated.');
         }, err => {
-            context.error = err;
-            context.$refs.toastr.e(JSON.stringify(err));
+            context.error = err.body;
+            context.$refs.toastr.e(JSON.stringify(err.body));
         });
     },
 

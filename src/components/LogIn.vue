@@ -136,7 +136,9 @@ export default {
             text: this.credentials.env
         };
         // default env
-        this.updateStudySummaryList(this.selectedEnv.value === '' ? 'local' : undefined);
+        if (this.selectedEnv.value !== '') {
+            this.updateStudySummaryList(undefined);
+        }
     }
 
 }
