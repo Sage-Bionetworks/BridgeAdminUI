@@ -14,8 +14,8 @@
                         Delete
                     </button>
                     <button class="ui red tiny button" v-if="$route.path !== '/study-list/create-one'" id="show-modal" @click="showDeactivate = true" :disabled="selectedStudyIds.length === 0">Deactivate</button>
-                    <router-link to="/study-list/create-one"><button
-                        v-if="$route.path !== '/study-list/create-one'"
+                    <router-link to="/create-study"><button
+                        v-if="$route.path !== '/create-study'"
                         class="ui primary tiny button">
                         Create One
                     </button></router-link>
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <router-view></router-view>
+        <!-- <router-view></router-view> -->
 
         <div class="scrollbox" v-if="$route.path !== '/study-list/create-one'">
 
