@@ -17,7 +17,7 @@
         </div>
 
         <div class="scrollbox">
-            <div class="alert alert-danger" v-if="error">
+            <div class="ui negative message" v-if="error">
                 <p>{{ error }}</p>
             </div>
             <form class="ui form">
