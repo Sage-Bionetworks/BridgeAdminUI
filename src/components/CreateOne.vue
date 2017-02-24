@@ -2,7 +2,7 @@
     <div class="create-one">
         <vue-toastr ref="toastr"></vue-toastr>
         <div class="ui negative message" v-if="error">
-            <p>{{ error }}</p>
+            <p>{{ error.message }}</p>
         </div>
         <div class="fixed-header">
             <div class="fixed-header-title">
@@ -16,9 +16,6 @@
                     <h3>Create Study</h3>
                 </div>
                 <div class="fixed-header-buttons">
-                    <div class="ui error message" v-if="error">
-                        <p>{{ error }}</p>
-                    </div>
                     <router-link to="/study-list">
                         <button class="ui red tiny button" v-bind:class="{ loading: loading, disabled: loading }">
                             Cancel
