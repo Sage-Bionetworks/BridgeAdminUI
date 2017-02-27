@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <header class="dev"> 
+        <header :class="currentHeaderEnv"> 
             <h2><i class="white heartbeat icon"></i> Bridge Admin</h2> 
             <div class="header-env">
                 <span>{{ user? user.studyName : '' }}</span>
@@ -48,13 +48,27 @@
 <script>
 import service from './services/service'
 import { mapState } from 'vuex'
+import store from './store'
 
 export default {
     data () {
         return {
         }
     },
-    computed: mapState({ user: state => state.user }),
+    computed: {
+        currentHeaderEnv: function () {
+            if (store.state.user) {
+                if (store.state.user.environment !== 'production') {
+                    return 'dev';
+                } else {
+                    return;
+                }
+            } else {
+                return;
+            }
+        },
+        ...mapState({ user: state => state.user })
+    },
     methods: {
         logOut () {
             service.logOut('/');

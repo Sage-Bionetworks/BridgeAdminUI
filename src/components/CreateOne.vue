@@ -184,7 +184,7 @@
 
                     <p>The Bridge Team</p>
                 </div>
-            </div>  
+            </div>
         </div>
     </div>
 </template>
@@ -292,9 +292,6 @@
         methods: {
             onSelectAdmins (items, lastSelectItem) {
                 this.selectedAdmins = items
-            },
-            onSelectRoles (items, lastSelectItem) {
-                console.log(items);
             },
             validateForm () {
                 this.$v.$touch();
