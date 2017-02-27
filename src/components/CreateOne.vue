@@ -156,7 +156,7 @@
 
                 <p><strong>This is the email sent to users requesting them to join Synapse Team when they sign up for your study. </strong></p>
 
-                <div class="ui message">
+                <div class="ui message" id="toCopy">
                     <p>Hi, </p>
 
                     <p>Thank you for creating a new Study. </p>
@@ -184,7 +184,7 @@
 
                     <p>The Bridge Team</p>
                 </div>
-            </div>  
+            </div>
         </div>
     </div>
 </template>
@@ -292,9 +292,6 @@
         methods: {
             onSelectAdmins (items, lastSelectItem) {
                 this.selectedAdmins = items
-            },
-            onSelectRoles (items, lastSelectItem) {
-                console.log(items);
             },
             validateForm () {
                 this.$v.$touch();
