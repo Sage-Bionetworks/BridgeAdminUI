@@ -156,7 +156,7 @@
 
                 <p><strong>This is the email sent to users requesting them to join Synapse Team when they sign up for your study. </strong></p>
 
-                <div class="ui message" id="toCopy">
+                <div class="ui message">
                     <p>Hi, </p>
 
                     <p>Thank you for creating a new Study. </p>
