@@ -4,7 +4,7 @@
       <div class="modal-wrapper">
         <div class="modal-container">
           <div class="ui negative message" v-if="error">
-              <p>{{ error }}</p>
+              <p>{{ error.message }}</p>
           </div>
           <div class="modal-header">
             <slot name="header">
@@ -56,14 +56,15 @@
 }
 
 .modal-container {
-  width: 300px;
+  width: 478px;
   margin: 0px auto;
   padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
   transition: all .3s ease;
-  font-family: Helvetica, Arial, sans-serif;
+  background-color: white;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;  
+  border-radius: 5px;
+  text-align: center;
 }
 
 .modal-header h3 {

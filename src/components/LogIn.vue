@@ -17,32 +17,35 @@
                 <p>{{ error.message }}</p>
 
             </div>
-            <div class="three wide field">
-                <label for="env">Enviornment</label>
-                <basic-select id="env" :options="envList" :selected-option="selectedEnv" @select="onSelectEnv" :class="{ disabled: loading }"></basic-select>
-            </div>
-
-            <hr>
 
             <div class="three wide field">
+                <label for="email">Email</label>
                 <input
-                    type="email"
+                    type="email" id="email"
                     placeholder="Enter your email"
                     v-model="credentials.email"
                 >
             </div>
             <div class="three wide field">
+                <label for="password">Password</label>
                 <input
-                    type="password"
+                    type="password" id="password"
                     placeholder="Enter your password"
                     v-model="credentials.password"
                 >
             </div>
-            <div class="three wide field" :class="{ disabled: loading || studyListLoading }">
-                <basic-select id="studyList" :options="studySummaryList" :selected-option="selectedStudy" @select="onSelectStudy"></basic-select>
+
+            <div class="three wide field">
+                <label for="env">Enviornment</label>
+                <basic-select id="env" :options="envList" :selected-option="selectedEnv" @select="onSelectEnv" :class="{ disabled: loading }"></basic-select>
+            </div>
+
+            <div class="three wide field" >
+                <label for="studyList">Study</label>
+                <basic-select id="studyList" :options="studySummaryList" :selected-option="selectedStudy" @select="onSelectStudy" :class="{ disabled: loading || studyListLoading }"></basic-select>
             </div>
             <button class="ui primary button" @click="submit()" v-bind:class="{ loading: loading, disabled: loading }">
-                Access
+                Sign In
             </button>
         </div>
 
