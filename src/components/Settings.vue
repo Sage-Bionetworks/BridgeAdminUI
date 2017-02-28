@@ -24,7 +24,7 @@
 
         <div class="scrollbox">
             <div class="ui negative message" v-if="error">
-                <p>{{ error }}</p>
+                <p>{{ error.message }}</p>
             </div>
             <form class="ui form">
                 <div class="field">

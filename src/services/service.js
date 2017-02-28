@@ -47,7 +47,7 @@ export default {
             var data = response.data;
             store.commit('refreshStudyList', data.items);
         }, err => {
-            context.error = err;
+            context.error = err.body;
         });
     },
 
@@ -56,7 +56,7 @@ export default {
             var data = response.data;
             return data.items
         }, err => {
-            context.error = err;
+            context.error = err.body;
             return;
         });
     },
@@ -66,7 +66,7 @@ export default {
             var data = response.data;
             store.commit('changeCurrentStudy', data);
         }, err => {
-            context.error = err;
+            context.error = err.body;
         });
     },
 
@@ -82,7 +82,7 @@ export default {
     deleteStudy (context, studyId, physical) {
         return context.$http.delete(store.state.API_BASE + config.updateStudy + studyId + '?' + 'physical=' + physical).then(response => {
         }, err => {
-            context.error = err;
+            context.error = err.body;
         });
     },
 
@@ -90,7 +90,7 @@ export default {
         return context.$http.get(store.state.API_BASE + config.getCacheKeys).then(response => {
             context.cacheKeys = response.data;
         }, err => {
-            context.error = err;
+            context.error = err.body;
         });
     },
 
@@ -98,7 +98,7 @@ export default {
         key = key.replace(':', '%3A'); // change colon to URI code
         return context.$http.delete(store.state.API_BASE + config.deleteCacheKey + key).then(response => {
         }, err => {
-            context.error = err;
+            context.error = err.body;
         });
     },
 
@@ -107,7 +107,7 @@ export default {
             var data = response.data;
             store.commit('refreshSurveyList', data.items);
         }, err => {
-            context.error = err;
+            context.error = err.body;
         });
     },
 
@@ -117,7 +117,7 @@ export default {
         var deleteApi = guid + '/revisions/' + createdOn + '?' + 'physical=' + physical;
         return context.$http.delete(store.state.API_BASE + config.deleteSurvey + deleteApi).then(response => {
         }, err => {
-            context.error = err;
+            context.error = err.body;
         });
     },
 
@@ -126,7 +126,7 @@ export default {
             var data = response.data;
             store.commit('refreshSchemaList', data.items);
         }, err => {
-            context.error = err;
+            context.error = err.body;
         });
     },
 
@@ -135,7 +135,7 @@ export default {
         var deleteSchemaApi = config.updateStudy + currentStudyId + '/uploadschemas/' + schemaId;
         return context.$http.delete(store.state.API_BASE + deleteSchemaApi).then(response => {
         }, err => {
-            context.error = err;
+            context.error = err.body;
         });
     }
 }

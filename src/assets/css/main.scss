@@ -192,6 +192,7 @@ progress {
 .disabled a {
     opacity: .7;
 }
+
 /* External Identifiers page controls, there's a primary button dropdown with poor icon spacing */
 .ui.small.button.dropdown {
     padding-right: .5rem;
@@ -214,4 +215,9 @@ progress {
 }
 .upload-id {
     font-family: monospace;
+}
+.role_info {
+    @include align-items(center);
+    padding: 7px;
+    margin-bottom: -em;
 }
