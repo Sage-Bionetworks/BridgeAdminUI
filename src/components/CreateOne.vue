@@ -15,7 +15,7 @@
                     </div> 
                     <h3>Create Study</h3>
                 </div>
-                <div class="fixed-header-buttons"> 
+                <div class="fixed-header-buttons" v-if="!isCreated"> 
                     <button class="ui blue tiny button" @click="validateForm()" v-bind:class="{ loading: loading, disabled: loading }">Save</button>
                 </div>
             </div>

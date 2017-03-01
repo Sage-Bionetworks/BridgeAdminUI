@@ -1,54 +1,44 @@
 <template>
-    <div>
-        <div class="fixed-header">
-            <div class="fixed-header-title"> 
-                <div class="fixed-header-heading"> 
-                    <h3>Log In</h3> 
-                </div> 
-            </div> 
-            <div class="ui empty secondary pointing menu"> 
-            </div> 
+    <div class="ui middle aligned center aligned grid login">
+        <div class="column">
+            <h2 class="ui image header">
+                <div class="content">
+                    Log in to your account
+                </div>
+            </h2>
+            <form class="ui large form">
+                <div class="ui negative message" v-if="error">
+                    <h3>There is an issue with your request</h3>
+                    <p>{{ error.message }}</p>
+                </div>
+                <div class="ui stacked secondary segment">
+                    <div class="field">
+                        <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        <input type="text" name="email" placeholder="E-mail address" v-model="credentials.email">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                        <i class="lock icon"></i>
+                        <input type="password" name="password" placeholder="Password" v-model="credentials.password">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="env">Enviornment</label>
+                        <basic-select id="env" :options="envList" :selected-option="selectedEnv" @select="onSelectEnv" :class="{ disabled: loading }"></basic-select>
+                    </div>
+
+                    <div class="field" >
+                        <label for="studyList">Study</label>
+                        <basic-select id="studyList" :options="studySummaryList" :selected-option="selectedStudy" @select="onSelectStudy" :class="{ disabled: loading || studyListLoading }"></basic-select>
+                    </div>
+                    <div class="ui fluid large primary submit button" @click="submit()" v-bind:class="{ loading: loading, disabled: loading }">     
+                        Sign In
+                    </div>
+                </div>
+            </form>
         </div>
-
-        <div class="ui form scrollbox">
-            <p>Log in to your account to get started.</p>
-            <div class="ui negative message" v-if="error">
-                <h3>There is an issue with your request</h3>
-                <p>{{ error.message }}</p>
-
-            </div>
-
-            <div class="three wide field">
-                <label for="email">Email</label>
-                <input
-                    type="email" id="email"
-                    placeholder="Enter your email"
-                    v-model="credentials.email"
-                >
-            </div>
-            <div class="three wide field">
-                <label for="password">Password</label>
-                <input
-                    type="password" id="password"
-                    placeholder="Enter your password"
-                    v-model="credentials.password"
-                >
-            </div>
-
-            <div class="three wide field">
-                <label for="env">Enviornment</label>
-                <basic-select id="env" :options="envList" :selected-option="selectedEnv" @select="onSelectEnv" :class="{ disabled: loading }"></basic-select>
-            </div>
-
-            <div class="three wide field" >
-                <label for="studyList">Study</label>
-                <basic-select id="studyList" :options="studySummaryList" :selected-option="selectedStudy" @select="onSelectStudy" :class="{ disabled: loading || studyListLoading }"></basic-select>
-            </div>
-            <button class="ui primary button" @click="submit()" v-bind:class="{ loading: loading, disabled: loading }">
-                Sign In
-            </button>
-        </div>
-
     </div>
 </template>
 

@@ -20,7 +20,13 @@ body {
     @include transition(opacity .5s ease-in-out);
     background-color: white;
     opacity: 1.0;
+    height: 100%
 }
+
+.column {
+  max-width: 450px;
+}
+
 section {
     @include flex-box(row);
     @include flex(1);
@@ -32,6 +38,15 @@ main {
     @include flex-box(column);
     padding: 0;
     overflow-y: auto;
+}
+
+.login {
+    @include flex(1);
+    padding: 1.5rem;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    height:93vh;
+    margin:0;  
 }
 
 .scrollbox {

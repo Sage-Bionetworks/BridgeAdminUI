@@ -23,7 +23,7 @@
 
         <div class="scrollbox" v-if="$route.path !== '/study-list/create-one'">
 
-            <p v-if="studyList.length === 0"><strong>Loading Studies...</strong></p>
+            <p v-if="studyList.length === 0"><strong>There are currently no study</strong></p>
 
             <table class="ui compact selectable table">
                 <thead>

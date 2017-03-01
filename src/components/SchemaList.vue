@@ -21,7 +21,7 @@
 
         <div class="scrollbox">
 
-            <p v-if="schemaList.length === 0"><strong>Loading Schemas...</strong></p>
+            <p v-if="schemaList.length === 0"><strong>There are currently no schema</strong></p>
 
             <table class="ui compact selectable table">
                 <thead>
