@@ -21,7 +21,7 @@
 
         <div class="scrollbox">
 
-            <p v-if="surveyList.length === 0"><strong>Loading Surveys...</strong></p>
+            <p v-if="surveyList.length === 0"><strong>There are currently no survey</strong></p>
 
             <table class="ui compact selectable table">
                 <thead>

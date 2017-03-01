@@ -9,17 +9,17 @@
             </div>
         </header>
         <section>
-            <nav>
+            <nav v-if="user">
                 <div class="ui vertical menu">
                     <div class="item">
                         <i class="settings icon"></i> Study Admin
                         <div class="menu">
-                            <a><router-link to="/study-list" class="item" v-if="user" :class="{ active: pathTo === '/study-list' || pathTo === '/create-study' || pathTo === '/settings' }">Study List</router-link></a>
-                            <a><router-link to="/cache" class="item" v-if="user" :class="{ active: pathTo === '/cache' }">Cache Control</router-link></a>
+                            <a><router-link to="/study-list" class="item" :class="{ active: pathTo === '/study-list' || pathTo === '/create-study' || pathTo === '/settings' }">Study List</router-link></a>
+                            <a><router-link to="/cache" class="item" :class="{ active: pathTo === '/cache' }">Cache Control</router-link></a>
                         </div>
                     </div>
 
-                    <div class="item" v-if="user">
+                    <div class="item">
                         <i class="server icon"></i> Study Data Admin
                         <div class="menu">
                             <a><router-link to="/schema-list" class="item" :class="{ active: pathTo === '/schema-list' }">Data Schemas</router-link></a>
@@ -27,7 +27,7 @@
                         </div>
                     </div>
 
-                    <div class="item" v-if="user">
+                    <div class="item">
                         <i class="sign out icon"></i> <a href="" @click="logOut()">Sign Out</a>
                     </div>
                 </div>
