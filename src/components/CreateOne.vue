@@ -106,13 +106,13 @@
                                     <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].email.email && $v.users.$each[idx].email.$error">Email is invalid</p>
                                 </div>
 
-                                <div class="field" :class="{'error': $v.users.$each[idx].first_name.$error }">
-                                    <input type="text" @input="$v.users.$each[idx].first_name.$touch()" :name="'first-name' + idx" v-model="user.first_name" placeholder="First Name">
-                                    <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].first_name.required && $v.users.$each[idx].first_name.$error">First Name is required</p>
+                                <div class="field" :class="{'error': $v.users.$each[idx].firstName.$error }">
+                                    <input type="text" @input="$v.users.$each[idx].firstName.$touch()" :name="'first-name' + idx" v-model="user.firstName" placeholder="First Name">
+                                    <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].firstName.required && $v.users.$each[idx].firstName.$error">First Name is required</p>
                                 </div>
-                                <div class="field" :class="{'error': $v.users.$each[idx].last_name.$error }">
-                                    <input type="text" @input="$v.users.$each[idx].last_name.$touch()" :name="'last-name' + idx" v-model="user.last_name" placeholder="Last Name">
-                                    <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].last_name.required && $v.users.$each[idx].last_name.$error">Last Name is required</p>
+                                <div class="field" :class="{'error': $v.users.$each[idx].lastName.$error }">
+                                    <input type="text" @input="$v.users.$each[idx].lastName.$touch()" :name="'last-name' + idx" v-model="user.lastName" placeholder="Last Name">
+                                    <p class="ui pointing red basic tiny label" v-if="!$v.users.$each[idx].lastName.required && $v.users.$each[idx].lastName.$error">Last Name is required</p>
                                 </div>
 
                                 <div class="field" :class="{ error: !user.role_researcher && !user.role_dev }">
@@ -154,7 +154,7 @@
                 <p><strong>This is the email sent to users requesting them to join Synapse Team when they sign up for your study. </strong></p>
 
                 <div class="ui message" v-for="(user, idx) in users">
-                    <p>Hi {{ user.first_name }}, </p>
+                    <p>Hi {{ user.firstName }}, </p>
 
                     <p>We have created <strong><i>{{ study.name }}</i></strong>, which is your new study.</p>
 
@@ -226,8 +226,8 @@
                 users: [
                     {
                         email: '',
-                        first_name: '',
-                        last_name: '',
+                        firstName: '',
+                        lastName: '',
                         password: crypto.randomBytes(8).toString('hex') + 'A=', // generate random password for each user
                         role_researcher: false,
                         role_dev: true,
@@ -273,10 +273,10 @@
                         required,
                         email
                     },
-                    first_name: {
+                    firstName: {
                         required
                     },
-                    last_name: {
+                    lastName: {
                         required
                     }
                 }
@@ -331,6 +331,8 @@
                     this.users[user].roles = roles;
                 }
 
+                console.log(this.users);
+
                 // extract value as list from selectedAdmins
                 var selectedAdminIds = this.selectedAdmins.map((x) => {
                     return x.value;
@@ -349,8 +351,8 @@
             addUser () {
                 let user = {
                     email: '',
-                    first_name: '',
-                    last_name: '',
+                    firstName: '',
+                    lastName: '',
                     password: crypto.randomBytes(8).toString('hex') + 'A=',
                     role_researcher: false,
                     role_dev: false
