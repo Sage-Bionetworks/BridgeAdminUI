@@ -331,8 +331,6 @@
                     this.users[user].roles = roles;
                 }
 
-                console.log(this.users);
-
                 // extract value as list from selectedAdmins
                 var selectedAdminIds = this.selectedAdmins.map((x) => {
                     return x.value;
