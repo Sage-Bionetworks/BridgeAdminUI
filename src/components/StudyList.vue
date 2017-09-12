@@ -43,11 +43,15 @@
                             {{ study.identifier }}
                         </td>
                         <td>
-                            {{ study.active === true? 'Active' : 'Deactive' }}
+                            {{ study.active === true? 'Active' : 'Inactive' }}
                         </td>
                         <td style="padding: 0; text-align:right">
-                            <button class="ui basic compact mini button" v-if="study.active === true" id="show-modal" @click="showModal(false, study.identifier)">Deactivate</button>
-                            <button class="ui basic compact mini button" id="show-modal" @click="showModal(true, study.identifier)">Delete</button>
+                            <button class="ui red basic compact mini button" v-if="study.active === true" 
+                                id="show-modal" @click="showDeleteModal(false, study.identifier)">Deactivate</button>
+                            <button class="ui basic compact mini button" v-else 
+                                id="show-modal" @click="showActivateModal(study.identifier)">Reactivate</button>
+                            <button class="ui red compact mini button" id="show-modal" 
+                                @click="showDeleteModal(true, study.identifier)">Delete</button>
                         </td>
                     </tr>
                 </tbody>
@@ -84,19 +88,34 @@
                 </button>
             </div>
         </modal>
+        <modal v-if="showActivate">
+            <h3 slot="header">Reactivate Study</h3>
+            <div slot="body">
+                <h4>Are you sure you want to reactivate this study?</h4>
+            </div>
+            <div slot="footer">
+                <button class="ui button" @click="showActivate = false">
+                    Cancel
+                </button>
+                <button class="ui primary button" @click="activateStudy()" :class="{ loading: loading, disabled: loading }">
+                    Reactivate
+                </button>
+            </div>
+        </modal>
     </div>
 </template>
 
 <script>
-    import store from '../store'
-    import service from '../services/service'
+    import store from '../store';
+    import service from '../services/service';
     import {router} from '../main';
-    import { mapState } from 'vuex'
+    import { mapState } from 'vuex';
     export default {
         data () {
             return {
                 showDeactivate: false,
                 showDelete: false,
+                showActivate: false,
                 loading: false,
                 selectedStudyId: '',
                 error: ''
@@ -106,7 +125,7 @@
             ...mapState({studyList: state => state.studyList})
         },
         methods: {
-            showModal (physical, studyId) {
+            showDeleteModal(physical, studyId) {
                 this.selectedStudyId = studyId;
                 if (physical) {
                     this.showDelete = true;
@@ -114,12 +133,16 @@
                     this.showDeactivate = true;
                 }
             },
-            changeCurrentStudy (study) {
+            showActivateModal(studyId) {
+                this.selectedStudyId = studyId;
+                this.showActivate = true;
+            },
+            changeCurrentStudy(study) {
                 store.commit('changeCurrentStudy', study);
                 router.replace('/settings');
                 return false;
             },
-            deleteStudy (physical) {
+            deleteStudy(physical) {
                 // prevent user delete study api
                 if (this.selectedStudyId === 'api') {
                     this.$refs.toastr.Add({
@@ -148,13 +171,23 @@
                     } else {
                         this.$refs.toastr.s(physical ? 'Study ' + this.selectedStudyId + ' Deleted!' : 'Study ' + this.selectedStudyId + ' Deactivated!');
 
-                        service.getStudyList(this).then(() => {
-                            this.loading = false;
-                            this.showDelete = false;
-                            this.showDeactivate = false;
-                        });
+                        service.getStudyList(this).then(this.allIndicatorsOff);
                     }
                 });
+            },
+            activateStudy() {
+                this.loading = true;
+
+                service.getStudy(this, this.selectedStudyId).then((study) => {
+                    study.active = true;
+                    return service.updateStudy(this, study).then(this.allIndicatorsOff);
+                });
+            },
+            allIndicatorsOff() {
+                this.loading = false;
+                this.showDelete = false;
+                this.showDeactivate = false;
+                this.showActivate = false;
             }
         },
         created () {

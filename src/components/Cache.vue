@@ -24,7 +24,6 @@
             <div class="ui empty secondary pointing menu">
             </div>
         </div>
-
         <div class="scrollbox">
 
             <p v-if="cacheKeys.length === 0 && loading === true"><strong>Loading Cache List...</strong></p>

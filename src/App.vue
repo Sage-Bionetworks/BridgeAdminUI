@@ -43,9 +43,9 @@
 </template>
 
 <script>
-import service from './services/service'
-import { mapState } from 'vuex'
-import store from './store'
+import service from './services/service';
+import { mapState } from 'vuex';
+import store from './store';
 
 export default {
     data () {
@@ -77,8 +77,8 @@ export default {
     },
     watch: {
         '$route' (to, from) {
-          this.pathTo = to.path;
-          this.pathFrom = from.path;
+            this.pathTo = to.path;
+            this.pathFrom = from.path;
         }
     }
 }

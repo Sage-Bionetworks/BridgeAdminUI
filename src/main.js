@@ -1,25 +1,25 @@
-import Vue from 'vue'
-import App from './App.vue'
-import LogIn from './components/LogIn.vue'
-import StudyList from './components/StudyList.vue'
-import SurveyList from './components/SurveyList.vue'
-import SchemaList from './components/SchemaList.vue'
-import CreateOne from './components/CreateOne.vue'
-import VueRouter from 'vue-router'
-import VueResource from 'vue-resource'
-import store from './store'
-import Settings from './components/Settings.vue'
-import Cache from './components/Cache.vue'
+import Vue from 'vue';
+import App from './App.vue';
+import LogIn from './components/LogIn.vue';
+import StudyList from './components/StudyList.vue';
+import SurveyList from './components/SurveyList.vue';
+import SchemaList from './components/SchemaList.vue';
+import CreateOne from './components/CreateOne.vue';
+import VueRouter from 'vue-router';
+import VueResource from 'vue-resource';
+import store from './store';
+import Settings from './components/Settings.vue';
+import Cache from './components/Cache.vue';
 import Toastr from 'vue-toastr';
 import Modal from './components/Modal.vue';
-import Vuelidate from 'vuelidate'
+import Vuelidate from 'vuelidate';
 
 require('vue-toastr/src/vue-toastr.less');
 require('../static/favicon.ico');
 
-Vue.use(VueResource)
-Vue.use(VueRouter)
-Vue.use(Vuelidate)
+Vue.use(VueResource);
+Vue.use(VueRouter);
+Vue.use(Vuelidate);
 Vue.component('vue-toastr', Toastr);
 Vue.component('modal', Modal);
 
@@ -36,7 +36,7 @@ export var router = new VueRouter({
         { path: '/cache', component: Cache },
         { path: '*', redirect: '/' }
     ]
-})
+});
 
 router.beforeEach(({meta, path}, from, next) => {
     var { auth = true } = meta;
@@ -46,15 +46,15 @@ router.beforeEach(({meta, path}, from, next) => {
         return next({ path: '/' });
     }
     next();
-})
+});
 
 Vue.http.interceptors.push(function (request, next) {
-  // modify headers
-  request.headers.set('Content-Type', 'application/json');
-  request.headers.set('Bridge-Session', store.state.user ? store.state.user.sessionToken : '');
+    // modify headers
+    request.headers.set('Content-Type', 'application/json');
+    request.headers.set('Bridge-Session', store.state.user ? store.state.user.sessionToken : '');
 
-  // continue to next interceptor
-  next();
+    // continue to next interceptor
+    next();
 });
 
 // Make sure to inject the router.

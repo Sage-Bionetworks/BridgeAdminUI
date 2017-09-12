@@ -1,11 +1,13 @@
-import Vuex from 'vuex'
-import Vue from 'vue'
-import createPersistedState from 'vuex-persistedstate'
+import Vuex from 'vuex';
+import Vue from 'vue';
+import createPersistedState from 'vuex-persistedstate';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
-    plugins: [createPersistedState({ storage: window.sessionStorage })],
+    plugins: [createPersistedState({ 
+        storage: window.sessionStorage 
+    })],
     state: {
         user: undefined,
         API_BASE: '',
