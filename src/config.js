@@ -1,9 +1,9 @@
 module.exports = {
     environments: [
-            {value: 'local', label: 'Local'},
-            {value: 'develop', label: 'Development'},
-            {value: 'staging', label: 'Staging'},
-            {value: 'production', label: 'Production'}
+        {value: 'local', label: 'Local'},
+        {value: 'develop', label: 'Development'},
+        {value: 'staging', label: 'Staging'},
+        {value: 'production', label: 'Production'}
     ],
     host: {
         'local': 'http://localhost:9000',
@@ -12,11 +12,15 @@ module.exports = {
         'production': 'https://webservices.sagebridge.org'
     },
     adminList: [
-          { value: '3346407', text: 'test_1' },
-          { value: '3348228', text: 'test_2' },
-          { value: '3351155', text: 'Bridge_Study_Creator' },
-          { value: '273979', text: 'Brian_Bot' },
-          { value: '273984', text: 'Mike_Kellen' }
+        { value: '3346407', text: 'test_1' },
+        { value: '3348228', text: 'test_2' },
+        { value: '3351155', text: 'Bridge_Study_Creator' },
+        { value: '273979', text: 'Brian_Bot' },
+        { value: '273984', text: 'Mike_Kellen' }
+    ],
+    rolesList: [
+        { value: 'role_researcher', text: 'Researcher' },
+        { value: 'role_dev', text: 'Developer' }
     ],
     rolesList: [
         { value: 'role_researcher', text: 'Researcher' },

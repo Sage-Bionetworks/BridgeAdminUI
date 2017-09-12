@@ -10,7 +10,7 @@
                             <i class="right chevron icon divider"></i>
                         </router-link>
                     </div> 
-                    <h3>Admin Settings for Study: {{ currentStudy.name }}</h3> 
+                    <h3>{{ currentStudy.name }}</h3> 
                 </div>
                 <div class="fixed-header-buttons">
                     <button class="ui tiny primary button" @click="updateStudy()" :disabled="loading" :class="{ loading: loading }">
@@ -24,7 +24,7 @@
 
         <div class="scrollbox">
             <div class="ui negative message" v-if="error">
-                <p>{{ error }}</p>
+                <p>{{ error.message }}</p>
             </div>
             <form class="ui form">
                 <div class="field">

@@ -20,7 +20,13 @@ body {
     @include transition(opacity .5s ease-in-out);
     background-color: white;
     opacity: 1.0;
+    height: 100%
 }
+
+.column {
+  max-width: 450px;
+}
+
 section {
     @include flex-box(row);
     @include flex(1);
@@ -34,6 +40,14 @@ main {
     overflow-y: auto;
 }
 
+.login {
+    @include flex(1);
+    padding: 1.5rem;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    height:93vh;
+    margin:0;  
+}
 .scrollbox {
     @include flex(1);
     padding: 1.5rem;
@@ -58,12 +72,12 @@ header {
         font-variant: small-caps;
         letter-spacing: 2px;
         color: white;
-        padding: 1rem 2rem 0rem 1.5rem;
+        padding: 1.25rem 1rem;
     }
     .header-env {
         font-size: 1.25rem!important;
-        padding: 1.5rem 2rem 0rem 0rem;
         color: white;
+        padding: 1.25rem 1rem;
     }
 .scrollbox dd {
     margin: 1rem;
@@ -192,6 +206,7 @@ progress {
 .disabled a {
     opacity: .7;
 }
+
 /* External Identifiers page controls, there's a primary button dropdown with poor icon spacing */
 .ui.small.button.dropdown {
     padding-right: .5rem;
@@ -214,4 +229,9 @@ progress {
 }
 .upload-id {
     font-family: monospace;
+}
+.role_info {
+    @include align-items(center);
+    padding: 7px;
+    margin-bottom: -em;
 }

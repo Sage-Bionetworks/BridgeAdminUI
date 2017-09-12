@@ -2,7 +2,7 @@
     <div>
         <vue-toastr ref="toastr"></vue-toastr>
         <div class="ui negative message" v-if="error">
-            <p>{{ error }}</p>
+            <p>{{ error.message }}</p>
         </div>
         <div class="fixed-header">
             <div class="fixed-header-title">
@@ -21,7 +21,7 @@
 
         <div class="scrollbox">
 
-            <p v-if="schemaList.length === 0"><strong>Loading Schemas...</strong></p>
+            <p v-if="schemaList.length === 0"><strong>There are currently no schema</strong></p>
 
             <table class="ui compact selectable table">
                 <thead>
@@ -38,26 +38,28 @@
                         <th>Last Revision</th>
                     </tr>
                 </thead>
-                <tr v-for="schema in schemaList">
-                    <td>
-                        <div class="ui fitted checkbox" id="roles">
-                            <input type="checkbox" v-model="selectedSchemaIds" :value="schema.schemaId">
-                            <label></label>
-                        </div>
-                    </td>
-                    <td>
-                        {{ schema.name }}
-                    </td>
-                    <td>
-                        {{ schema.schemaId }}
-                    </td>
-                    <td>
-                        {{ schema.schemaType }}
-                    </td>
-                    <td>
-                        {{ schema.revision }}
-                    </td>
-                </tr>
+                <tbody>
+                    <tr v-for="schema in schemaList">
+                        <td>
+                            <div class="ui fitted checkbox" id="roles">
+                                <input type="checkbox" v-model="selectedSchemaIds" :value="schema.schemaId">
+                                <label></label>
+                            </div>
+                        </td>
+                        <td>
+                            {{ schema.name }}
+                        </td>
+                        <td>
+                            {{ schema.schemaId }}
+                        </td>
+                        <td>
+                            {{ schema.schemaType }}
+                        </td>
+                        <td>
+                            {{ schema.revision }}
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
 
@@ -65,15 +67,15 @@
         <modal v-if="showDelete">
             <h3 slot="header">Delete Schema</h3>
             <div slot="body">
-                <h4 v-if="this.selectedSchemaIds.length === 1">Ready to delete: {{ this.selectedSchemaIds[0] }}?</h4>
-                <h4 v-if="this.selectedSchemaIds.length !== 1">Ready to delete: {{ this.selectedSchemaIds[0] }} and other {{ this.selectedSchemaIds.length - 1 }} schemas?</h4>
+                <h4 v-if="this.selectedSchemaIds.length === 1">Are you sure you want to delete this schema?</h4>
+                <h4 v-if="this.selectedSchemaIds.length !== 1">Are you sure you want to delete these schemas?</h4>
             </div>
             <div slot="footer">
                 <button class="ui button" @click="showDelete = false">
                     Cancel
                 </button>
-                <button class="ui blue button" @click="deleteSchema(true)" :class="{ loading: loading, disabled: loading }">
-                    Commit
+                <button class="ui red button" @click="deleteSchema(true)" :class="{ loading: loading, disabled: loading }">
+                    Delete
                 </button>
             </div>
         </modal>
@@ -122,7 +124,7 @@
                         var schemaId = cxt.selectedSchemaIds[i];
                         service.deleteSchema(cxt, schemaId).then(() => {
                             if (cxt.error) {
-                                errorStack.push(cxt.error);
+                                errorStack.push(cxt.error.message);
                             } else {
                                 cxt.$refs.toastr.s('Schema ' + schemaId + ' Deleted!');
                             }

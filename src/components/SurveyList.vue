@@ -2,7 +2,7 @@
     <div>
         <vue-toastr ref="toastr"></vue-toastr>
         <div class="ui negative message" v-if="error">
-            <p>{{ error }}</p>
+            <p>{{ error.message }}</p>
         </div>
         <div class="fixed-header">
             <div class="fixed-header-title">
@@ -13,7 +13,6 @@
                     <button class="ui red tiny button" id="show-modal" @click="showDelete = true" :disabled="selectedSurveyGuidsWithCreatedOns.length === 0">
                         Delete
                     </button>
-                    <button class="ui red tiny button" id="show-modal" @click="showDeactivate = true" :disabled="selectedSurveyGuidsWithCreatedOns.length === 0">Deactivate</button>
                 </div>
             </div>
             <div class="ui empty secondary pointing menu">
@@ -22,7 +21,7 @@
 
         <div class="scrollbox">
 
-            <p v-if="surveyList.length === 0"><strong>Loading Surveys...</strong></p>
+            <p v-if="surveyList.length === 0"><strong>There are currently no survey</strong></p>
 
             <table class="ui compact selectable table">
                 <thead>
@@ -39,26 +38,28 @@
                         <th>Status</th>
                     </tr>
                 </thead>
-                <tr v-for="survey in surveyList">
-                    <td>
-                        <div class="ui fitted checkbox" id="roles">
-                            <input type="checkbox" v-model="selectedSurveyGuidsWithCreatedOns" :value="{ guid: survey.guid, createdOn: survey.createdOn }">
-                            <label></label>
-                        </div>
-                    </td>
-                    <td>
-                        {{ survey.name }}
-                    </td>
-                    <td>
-                        {{ new Date(survey.createdOn) | moment }}
-                    </td>
-                    <td>
-                        {{ survey.elements.length === 0? '' : survey.elements }}
-                    </td>
-                    <td>
-                        {{ survey.deleted === true? 'Deactive' : 'Active' }}
-                    </td>
-                </tr>
+                <tbody>
+                    <tr v-for="survey in surveyList">
+                        <td>
+                            <div class="ui fitted checkbox" id="roles">
+                                <input type="checkbox" v-model="selectedSurveyGuidsWithCreatedOns" :value="{ guid: survey.guid, createdOn: survey.createdOn }">
+                                <label></label>
+                            </div>
+                        </td>
+                        <td>
+                            {{ survey.name }}
+                        </td>
+                        <td>
+                            {{ new Date(survey.createdOn) | moment }}
+                        </td>
+                        <td>
+                            {{ survey.elements.length === 0? '' : survey.elements }}
+                        </td>
+                        <td>
+                            {{ survey.deleted === true? 'Deactive' : 'Active' }}
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
 
@@ -66,30 +67,15 @@
         <modal v-if="showDelete">
             <h3 slot="header">Delete Study</h3>
             <div slot="body">
-                <h4 v-if="this.selectedSurveyGuidsWithCreatedOns.length === 1">Ready to delete: {{ this.selectedSurveyGuidsWithCreatedOns[0] }}?</h4>
-                <h4 v-if="this.selectedSurveyGuidsWithCreatedOns.length !== 1">Ready to delete: {{ this.selectedSurveyGuidsWithCreatedOns[0] }} and other {{ this.selectedSurveyGuidsWithCreatedOns.length - 1 }} surveys?</h4>
+                <h4 v-if="this.selectedSurveyGuidsWithCreatedOns.length === 1">Are you sure you want to delete this survey?</h4>
+                <h4 v-if="this.selectedSurveyGuidsWithCreatedOns.length !== 1">Are you sure you want to delete these surveys?</h4>
             </div>
             <div slot="footer">
                 <button class="ui button" @click="showDelete = false">
                     Cancel
                 </button>
-                <button class="ui blue button" @click="deleteSurvey(true)" :class="{ loading: loading, disabled: loading }">
-                    Commit
-                </button>
-            </div>
-        </modal>
-        <modal v-if="showDeactivate">
-            <h3 slot="header">Deactivate Study</h3>
-            <div slot="body">
-                <h4 v-if="this.selectedSurveyGuidsWithCreatedOns.length === 1">Ready to deactivate: {{ this.selectedSurveyGuidsWithCreatedOns[0] }}?</h4>
-                <h4 v-if="this.selectedSurveyGuidsWithCreatedOns.length !== 1">Ready to deactivate: {{ this.selectedSurveyGuidsWithCreatedOns[0] }} and other {{ this.selectedSurveyGuidsWithCreatedOns.length - 1 }} surveys?</h4>
-            </div>
-            <div slot="footer">
-                <button class="ui button" @click="showDeactivate = false">
-                    Cancel
-                </button>
-                <button class="ui blue button" @click="deleteSurvey(false)" :class="{ loading: loading, disabled: loading }">
-                    Commit
+                <button class="ui red button" @click="deleteSurvey(true)" :class="{ loading: loading, disabled: loading }">
+                    Delete
                 </button>
             </div>
         </modal>
@@ -145,7 +131,7 @@
                         var surveyKeys = cxt.selectedSurveyGuidsWithCreatedOns[i];
                         service.deleteSurvey(cxt, surveyKeys, physical).then(() => {
                             if (cxt.error) {
-                                errorStack.push(cxt.error);
+                                errorStack.push(cxt.error.message);
                             } else {
                                 cxt.$refs.toastr.s(physical ? 'Survey ' + surveyKeys + ' Deleted!' : 'Survey ' + surveyKeys + ' Deactivated!');
                             }

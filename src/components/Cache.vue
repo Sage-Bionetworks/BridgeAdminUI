@@ -2,7 +2,7 @@
     <div>
         <vue-toastr ref="toastr"></vue-toastr>
         <div class="ui negative message" v-if="error">
-            <p>{{ error }}</p>
+            <p>{{ error.message }}</p>
         </div>
         <div class="fixed-header">
             <div class="fixed-header-title">
@@ -24,7 +24,6 @@
             <div class="ui empty secondary pointing menu">
             </div>
         </div>
-
         <div class="scrollbox">
 
             <p v-if="cacheKeys.length === 0 && loading === true"><strong>Loading Cache List...</strong></p>
@@ -37,25 +36,27 @@
                         <th>Cache Key</th>
                     </tr>
                 </thead>
-                <tr v-for="cache in cacheKeys">
-                    <td>
-                        <div class="ui fitted checkbox" id="keys">
-                            <input type="checkbox" v-model="selectedKeys" :value="cache">
-                            <label></label>
-                        </div>
-                    </td>
-                    <td>
-                        {{ cache }}
-                    </td>
-                </tr>
+                <tbody>
+                    <tr v-for="cache in cacheKeys">
+                        <td>
+                            <div class="ui fitted checkbox" id="keys">
+                                <input type="checkbox" v-model="selectedKeys" :value="cache">
+                                <label></label>
+                            </div>
+                        </td>
+                        <td>
+                            {{ cache }}
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
 
         <modal v-if="showDelete">
             <h3 slot="header">Delete Cache</h3>
             <div slot="body">
-                <h4 v-if="this.selectedKeys.length === 1">Ready to sign out: {{ this.selectedKeys[0] }}?</h4>
-                <h4 v-if="this.selectedKeys.length !== 1">Ready to sign out: {{ this.selectedKeys[0] }} and other {{ this.selectedKeys.length - 1 }} studies?</h4>
+                <h4 v-if="this.selectedKeys.length === 1">Are you sure you want to delete this cache key?</h4>
+                <h4 v-if="this.selectedKeys.length !== 1">Are you sure you want to delete these cache keys?</h4>
             </div>
             <div slot="footer">
                 <button class="ui button" @click="showDelete = false">
@@ -64,14 +65,14 @@
                 <button class="ui red button" 
                     @click="deleteKeys(selectedKeys)" 
                     :class="{ loading: this.loading, disabled: this.loading }">
-                    Commit
+                    Delete
                 </button>
             </div>
         </modal>
         <modal v-if="showDeleteAll">
             <h3 slot="header">Delete All Cache</h3>
             <div slot="body">
-                <h4>Ready to sign out every one?</h4>
+                <h4>Are you sure you want to sign out everyone?</h4>
             </div>
             <div slot="footer">
                 <button class="ui button" @click="showDeleteAll = false">
@@ -80,7 +81,7 @@
                 <button class="ui red button" 
                     @click="deleteKeys(cacheKeys)" 
                     :class="{ loading: this.loading, disabled: this.loading }">
-                    Commit
+                    Sign everyone out
                 </button>
             </div>
         </modal>
@@ -116,7 +117,7 @@
                         var key = keys[i];
                         service.deleteKey(cxt, key).then(() => {
                             if (cxt.error) {
-                                errorStack.push(cxt.error);
+                                errorStack.push(cxt.error.message);
                             } else {
                                 cxt.$refs.toastr.s('Cache ' + key + ' Deleted!');
                             }

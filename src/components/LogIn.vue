@@ -1,58 +1,59 @@
 <template>
-    <div>
-        <div class="fixed-header">
-            <div class="fixed-header-title"> 
-                <div class="fixed-header-heading"> 
-                    <h3>Log In</h3> 
-                </div> 
-            </div> 
-            <div class="ui empty secondary pointing menu"> 
-            </div> 
+    <div class="ui middle aligned center aligned grid login">
+        <div class="column">
+            <h2 class="ui image header">
+                <div class="content">
+                    Sign In
+                </div>
+            </h2>
+            <form class="ui large form">
+                <div class="ui negative message" v-if="error">
+                    <h3>There is an issue with your request</h3>
+                    <p>{{ error.message }}</p>
+                </div>
+                <div class="ui secondary segment">
+                    <div class="field">
+                        <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        <input type="text" name="email" placeholder="E-mail address" v-model="credentials.email">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                        <i class="lock icon"></i>
+                        <input type="password" name="password" placeholder="Password" v-model="credentials.password">
+                        </div>
+                    </div>
+                    <div class="two fields">
+                        <div class="field">
+                            <label for="env">Environment</label>
+                            <basic-select id="env" :options="envList" :selected-option="selectedEnv" 
+                                @select="onSelectEnv" :class="{ disabled: loading }"></basic-select>
+                        </div>
+                        <div class="field" >
+                            <label for="studyList">Study</label>
+                            <basic-select id="studyList" :options="studySummaryList" :selected-option="selectedStudy" 
+                                @select="onSelectStudy" :class="{ disabled: loading || studyListLoading }"></basic-select>
+                        </div>
+                    </div>
+                    <div class="ui fluid large primary submit button" @click="submit()" v-bind:class="{ loading: loading, disabled: loading }">     
+                        Sign In
+                    </div>
+                </div>
+            </form>
         </div>
-
-        <div class="ui form scrollbox">
-            <p>Log in to your account to get started.</p>
-            <div class="ui negative message" v-if="error">
-                <h3>There is an issue with your request</h3>
-                <p>{{ error.message }}</p>
-
-            </div>
-            <div class="three wide field">
-                <label for="env">Enviornment</label>
-                <basic-select id="env" :options="envList" :selected-option="selectedEnv" @select="onSelectEnv" :class="{ disabled: loading }"></basic-select>
-            </div>
-
-            <hr>
-
-            <div class="three wide field">
-                <input
-                    type="email"
-                    placeholder="Enter your email"
-                    v-model="credentials.email"
-                >
-            </div>
-            <div class="three wide field">
-                <input
-                    type="password"
-                    placeholder="Enter your password"
-                    v-model="credentials.password"
-                >
-            </div>
-            <div class="three wide field" :class="{ disabled: loading || studyListLoading }">
-                <basic-select id="studyList" :options="studySummaryList" :selected-option="selectedStudy" @select="onSelectStudy"></basic-select>
-            </div>
-            <button class="ui primary button" @click="submit()" v-bind:class="{ loading: loading, disabled: loading }">
-                Access
-            </button>
-        </div>
-
     </div>
 </template>
 
 <script>
-import service from '../services/service'
-import config from '../config'
-import { BasicSelect } from 'vue-search-select'
+import service from '../services/service';
+import config from '../config';
+import { BasicSelect } from 'vue-search-select';
+
+function credentials(fieldName) {
+    var creds = window.sessionStorage.getItem('credentials');
+    return creds === null ? '' : JSON.parse(creds)[fieldName];
+}
 
 export default {
     components: {
@@ -64,11 +65,11 @@ export default {
             studyListLoading: false,
             showModal: false,
             credentials: {
-                env: window.sessionStorage.getItem('credentials') === null ? '' : JSON.parse(window.sessionStorage.getItem('credentials')).env,
-                email: window.sessionStorage.getItem('credentials') === null ? '' : JSON.parse(window.sessionStorage.getItem('credentials')).email,
-                password: window.sessionStorage.getItem('credentials') === null ? '' : JSON.parse(window.sessionStorage.getItem('credentials')).password,
-                study: window.sessionStorage.getItem('credentials') === null ? '' : JSON.parse(window.sessionStorage.getItem('credentials')).study,
-                studyName: window.sessionStorage.getItem('credentials') === null ? '' : JSON.parse(window.sessionStorage.getItem('credentials')).studyName
+                env: credentials('env'),
+                email: credentials('email'),
+                password: credentials('password'),
+                study: credentials('study'),
+                studyName: credentials('studyName')
             },
             selectedEnv: {},
             studySummaryList: [],
@@ -79,10 +80,7 @@ export default {
     computed: {
         envList: function () {
             return Object.keys(config.host).map((x) => {
-                return {
-                    value: x,
-                    text: x
-                }
+                return {value: x, text: x.substring(0,1).toUpperCase() + x.substring(1)}
             });
         }
     },
