@@ -1,26 +1,24 @@
 <template>
-    <div id="app">
+    <div id="app" style="height: 100%; outline: 2px solid blue">
         <header :class="currentHeaderEnv"> 
-            <h2><i class="white heartbeat icon"></i> Bridge Admin</h2> 
-            <div class="header-env" v-if="user">
-                <span>{{ user? user.studyName : '' }}</span>
-                <span> on </span>
-                <span>{{ user? user.environment : '' }}</span>
+            <div class="header-env">
+                <i class="white heartbeat icon"></i>
+                <span>Bridge Admin<span v-if="user"> for {{ user? user.environment : '' }}</span></span>
             </div>
         </header>
         <section>
             <nav v-if="user">
                 <div class="ui vertical menu">
                     <div class="item">
-                        <i class="settings icon"></i> Study Admin
+                        <i class="settings icon"></i> Cross-Study Admin
                         <div class="menu">
-                            <a><router-link to="/study-list" class="item" :class="{ active: pathTo === '/study-list' || pathTo === '/create-study' || pathTo === '/settings' }">Study List</router-link></a>
+                            <a><router-link to="/study-list" class="item" :class="{ active: pathTo === '/study-list' || pathTo === '/create-study' || pathTo === '/settings' }">Studies</router-link></a>
                             <a><router-link to="/cache" class="item" :class="{ active: pathTo === '/cache' }">Cache Control</router-link></a>
                         </div>
                     </div>
 
                     <div class="item">
-                        <i class="server icon"></i> Study Data Admin
+                        <i class="server icon"></i> Study Data
                         <div class="menu">
                             <a><router-link to="/schema-list" class="item" :class="{ active: pathTo === '/schema-list' }">Data Schemas</router-link></a>
                             <a><router-link to="/survey-list" class="item" :class="{ active: pathTo === '/survey-list' }">Surveys</router-link></a>
@@ -37,7 +35,7 @@
             </main>
         </section>
         <footer>
-            <p>&copy; 2015-2016 Sage Bionetworks. </p>
+            <p>&copy; 2017 Sage Bionetworks. </p>
         </footer>
     </div>
 </template>

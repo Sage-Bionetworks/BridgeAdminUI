@@ -1,9 +1,6 @@
 <template>
     <div>
         <vue-toastr ref="toastr"></vue-toastr>
-        <div class="ui negative message" v-if="error">
-            <p>{{ error.message }}</p>
-        </div>
         <div class="fixed-header">
             <div class="fixed-header-title">
                 <div class="fixed-header-heading">
@@ -18,8 +15,10 @@
             <div class="ui empty secondary pointing menu">
             </div>
         </div>
-
         <div class="scrollbox">
+            <div class="ui negative message" v-if="error">
+                <p>{{ error.message }}</p>
+            </div>
 
             <p v-if="surveyList.length === 0"><strong>There are currently no survey</strong></p>
 
@@ -39,7 +38,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="survey in surveyList">
+                    <tr v-for="survey in surveyList" :key="survey.guid">
                         <td>
                             <div class="ui fitted checkbox" id="roles">
                                 <input type="checkbox" v-model="selectedSurveyGuidsWithCreatedOns" :value="{ guid: survey.guid, createdOn: survey.createdOn }">

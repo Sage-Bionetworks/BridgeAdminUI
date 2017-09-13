@@ -1,5 +1,6 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
+import service from './services/service';
 import createPersistedState from 'vuex-persistedstate';
 
 Vue.use(Vuex);
@@ -28,6 +29,9 @@ export default new Vuex.Store({
         changeCurrentStudy (state, study) {
             state.currentStudy = study;
         },
+        activateStudy (state) {
+            state.currentStudy.active = true;
+        },
         refreshStudyList (state, studyList) {
             state.studyList = studyList;
         },
@@ -40,6 +44,15 @@ export default new Vuex.Store({
         refreshSchemaList (state, schemaList) {
             state.schemaList = schemaList;
         }
+    },
+    actions: {
+        activateStudy (store, {context, selectedStudyId}) {
+            return service.getStudy(context, selectedStudyId).then((study) => {
+                store.commit('changeCurrentStudy', study);
+                store.commit('activateStudy');
+                return service.updateStudy(context, store.state.currentStudy);
+            });
+        }
     }
-})
+});
 
