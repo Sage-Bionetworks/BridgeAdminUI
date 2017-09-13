@@ -3,11 +3,10 @@ import config from '../config';
 import store from '../store';
 
 export default {
-    logIn (context, creds, redirect) {
+    logIn(context, creds, redirect) {
         store.commit('updateBase', config.host[creds.env]);
         return context.$http.post(store.state.API_BASE + config.signIn, creds).then(response => {
             var data = response.data;
-
             data.studyName = creds.studyName;
             data.studyId = creds.study;
             store.commit('refresh', data);
@@ -38,7 +37,7 @@ export default {
             context.error = err.body;
         });
     },
-    getStudyList(context) {
+    getStudyList(context){
         return context.$http.get(store.state.API_BASE + config.getStudyList).then(response => {
             var data = response.data;
             store.commit('refreshStudyList', data.items);
@@ -55,8 +54,6 @@ export default {
             return;
         });
     },
-    // TODO: This shouldn't set the current study... I don't think. Is that the user's study or the 
-    // target study?
     getStudy(context, id) {
         return context.$http.get(store.state.API_BASE + config.getStudy + id).then(response => {
             var data = response.data;
@@ -67,7 +64,8 @@ export default {
         });
     },
     updateStudy(context, study) {
-        return context.$http.post(store.state.API_BASE + config.updateStudy + study.identifier, study).then(response => {
+        var url = store.state.API_BASE + config.updateStudy + study.identifier;
+        return context.$http.post(url, study).then(response => {
             context.$refs.toastr.s('Study Updated.');
         }, err => {
             context.error = err.body;
@@ -75,12 +73,11 @@ export default {
         });
     },
     deleteStudy(context, studyId, physical) {
-        return context.$http.delete(store.state.API_BASE + config.updateStudy + studyId + '?' + 'physical=' + physical).then(response => {
+        var url = store.state.API_BASE + config.updateStudy + studyId + '?' + 'physical=' + physical;
+        return context.$http.delete(url).then(response => {
         }, err => {
             context.error = err.body;
         });
-    },
-    activateStudy(context, studyId) {
     },
     getCacheKeys(context) {
         return context.$http.get(store.state.API_BASE + config.getCacheKeys).then(response => {
@@ -129,4 +126,4 @@ export default {
             context.error = err.body;
         });
     }
-}
+}   

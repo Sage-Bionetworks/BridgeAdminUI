@@ -1,9 +1,6 @@
 <template>
     <div>
         <vue-toastr ref="toastr"></vue-toastr>
-        <div class="ui negative message" v-if="error">
-            <p>{{ error.message }}</p>
-        </div>
         <div class="fixed-header">
             <div class="fixed-header-title">
                 <div class="fixed-header-heading">
@@ -20,11 +17,11 @@
             <div class="ui empty secondary pointing menu">
             </div>
         </div>
-
         <div class="scrollbox" v-if="$route.path !== '/study-list/create-one'">
-
-            <p v-if="studyList.length === 0"><strong>There are currently no study</strong></p>
-
+            <div class="ui negative message" v-if="error">
+                <p>{{ error.message }}</p>
+            </div>
+            <p v-if="studyList.length === 0"><strong>There are currently no studies.</strong></p>
             <table class="ui compact selectable table">
                 <thead>
                     <tr>
@@ -35,7 +32,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="study in studyList" :class="study.active === true? '' : 'warning'">
+                    <tr v-for="study in studyList" :key="study.identifier" 
+                        :class="study.active === true? '' : 'warning'">
                         <td>
                             <a v-on:click="changeCurrentStudy(study)" style="cursor: pointer;">{{ study.name }}</a>
                         </td>
@@ -46,16 +44,17 @@
                             {{ study.active === true? 'Active' : 'Inactive' }}
                         </td>
                         <td style="padding: 0; text-align:right">
-                            <button class="ui red basic compact mini button" v-if="study.active === true" 
-                                id="show-modal" @click="showDeleteModal(false, study.identifier)">Deactivate</button>
-                            <button class="ui basic compact mini button" v-else 
-                                id="show-modal" @click="showActivateModal(study.identifier)">Reactivate</button>
-                            <button class="ui red compact mini button" id="show-modal" 
-                                @click="showDeleteModal(true, study.identifier)">Delete</button>
+                            <div v-show="isDeleteable(study.identifier)">
+                                <button class="ui red basic compact mini button" v-if="study.active === true" 
+                                    @click="showDeleteModal(false, study.identifier)">Deactivate</button>
+                                <button class="ui basic compact mini button" v-else 
+                                    @click="showActivateModal(study.identifier)">Reactivate</button>
+                                <button class="ui red compact mini button" 
+                                    @click="showDeleteModal(true, study.identifier)">Delete</button>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
-
             </table>
         </div>
 
@@ -121,10 +120,11 @@
                 error: ''
             }
         },
-        computed: {
-            ...mapState({studyList: state => state.studyList})
-        },
+        computed: mapState(['studyList']),
         methods: {
+            isDeleteable(studyId) {
+                return studyId !== 'shared' && studyId !== 'api';
+            },
             showDeleteModal(physical, studyId) {
                 this.selectedStudyId = studyId;
                 if (physical) {
@@ -159,6 +159,7 @@
                 this.loading = true;
 
                 service.deleteStudy(this, this.selectedStudyId, physical).then(() => {
+                    // TODO: error handling is minimal in the app, work on this
                     if (this.error) {
                         this.$refs.toastr.Add({
                             title: 'Server Error', // Toast Title
@@ -177,11 +178,13 @@
             },
             activateStudy() {
                 this.loading = true;
-
-                service.getStudy(this, this.selectedStudyId).then((study) => {
-                    study.active = true;
-                    return service.updateStudy(this, study).then(this.allIndicatorsOff);
-                });
+                store.dispatch('activateStudy', {
+                    context: this,
+                    selectedStudyId: this.selectedStudyId
+                })
+                .then(() => {
+                    return service.getStudyList(this);
+                }).then(this.allIndicatorsOff);
             },
             allIndicatorsOff() {
                 this.loading = false;

@@ -1,9 +1,6 @@
 <template>
     <div class="create-one">
         <vue-toastr ref="toastr"></vue-toastr>
-        <div class="ui negative message" v-if="error">
-            <p>{{ error.message }}</p>
-        </div>
         <div class="fixed-header">
             <div class="fixed-header-title">
                 <div class="fixed-header-heading">
@@ -13,41 +10,42 @@
                             <i class="right chevron icon divider"></i>
                         </router-link>
                     </div> 
-                    <h3>Create Study</h3>
+                    <h3>New Study</h3>
                 </div>
-                <div class="fixed-header-buttons" v-if="!isCreated"> 
+                <div class="fixed-header-buttons">
                     <button class="ui blue tiny button" @click="validateForm()" v-bind:class="{ loading: loading, disabled: loading }">Save</button>
                 </div>
             </div>
             <div class="ui empty secondary pointing menu">
             </div>
         </div>
-
         <div class="scrollbox">
-
+            <div class="ui negative message" v-if="error">
+                <p>{{ error.message }}</p>
+            </div>
             <div v-if="!isCreated">
-                <div class="study-info">
+                <div class="study-info" style="margin-bottom: 2rem">
                     <h3 class="ui dividing header">Study Information</h3>
                     <form class="ui form"> 
                         <div class="two fields">
-                            <div class="field" :class="{'error': $v.study.identifier.$error }">
-                                <label for="study-id">Study ID</label>
-                                <input type="text" @input="$v.study.identifier.$touch()" name="study-id" v-model="study.identifier">
-                                <p class="ui pointing red basic tiny label" v-if="!$v.study.identifier.required && $v.study.identifier.$error">ID is required</p>
-                            </div>
                             <div class="field" :class="{'error': $v.study.name.$error }">
                                 <label for="study-name">Study Name</label>
                                 <input type="text" @input="$v.study.name.$touch()" name="study-name" v-model="study.name" >
                                 <p class="ui pointing red basic tiny label" v-if="!$v.study.name.required && $v.study.name.$error">Name is required</p>
                             </div>                    
+                            <div class="form-group field" :class="{'error': $v.study.supportEmail.$error }">
+                                <label for="supportEmail">Support Email</label>
+                                <input type="email" @input="$v.study.supportEmail.$touch()" name="supportEmail"  v-model="study.supportEmail">
+                                <p class="ui pointing red basic tiny label" v-if="!$v.study.supportEmail.required && $v.study.supportEmail.$error">Support Email is required</p>
+                                <p class="ui pointing red basic tiny label" v-if="!$v.study.supportEmail.email && $v.study.supportEmail.$error">Email is invalid</p>
+                            </div>
                         </div>
 
                         <div class="two fields">
-                            <div class="field" :class="{'error': $v.study.consentNotificationEmail.$error }">
-                                <label for="consent-notification-email">Consent Notification Email</label>
-                                <input type="email" @input="$v.study.consentNotificationEmail.$touch()" name="consent-notification-email" v-model="study.consentNotificationEmail">
-                                <p class="ui pointing red basic tiny label" v-if="!$v.study.consentNotificationEmail.required && $v.study.consentNotificationEmail.$error">ID is required</p>
-                                <p class="ui pointing red basic tiny label" v-if="!$v.study.consentNotificationEmail.email && $v.study.consentNotificationEmail.$error">Email is invalid</p>
+                            <div class="form-group field" :class="{'error': $v.study.sponsorName.$error }">
+                                <label for="sponsor-name">Sponsor Name</label>
+                                <input type="text" @input="$v.study.sponsorName.$touch()" class="form-control" v-model="study.sponsorName">
+                                <p class="ui pointing red basic tiny label" v-if="!$v.study.sponsorName.required && $v.study.sponsorName.$error">ID is required</p>
                             </div>
                             <div class="form-group field" :class="{'error': $v.study.technicalEmail.$error }">
                                 <label for="technicalEmail">Technical Email</label>
@@ -58,37 +56,23 @@
                         </div>
 
                         <div class="two fields">
-                            <div class="form-group field" :class="{'error': $v.study.supportEmail.$error }">
-                                <label for="supportEmail">Support Email</label>
-                                <input type="email" @input="$v.study.supportEmail.$touch()" name="supportEmail"  v-model="study.supportEmail">
-                                <p class="ui pointing red basic tiny label" v-if="!$v.study.supportEmail.required && $v.study.supportEmail.$error">Support Email is required</p>
-                                <p class="ui pointing red basic tiny label" v-if="!$v.study.supportEmail.email && $v.study.supportEmail.$error">Email is invalid</p>
+                            <div class="field" :class="{'error': $v.study.identifier.$error }">
+                                <label for="study-id">Study ID</label>
+                                <input type="text" @input="$v.study.identifier.$touch()" name="study-id" v-model="study.identifier">
+                                <p class="ui pointing red basic tiny label" v-if="!$v.study.identifier.required && $v.study.identifier.$error">ID is required</p>
                             </div>
-                            <div class="form-group field" :class="{'error': $v.study.sponsorName.$error }">
-                                <label for="sponsor-name">Sponsor Name</label>
-                                <input type="text" @input="$v.study.sponsorName.$touch()" class="form-control" v-model="study.sponsorName">
-                                <p class="ui pointing red basic tiny label" v-if="!$v.study.sponsorName.required && $v.study.sponsorName.$error">ID is required</p>
+                            <div class="field" :class="{'error': $v.study.consentNotificationEmail.$error }">
+                                <label for="consent-notification-email">Consent Notification Email</label>
+                                <input type="email" @input="$v.study.consentNotificationEmail.$touch()" name="consent-notification-email" v-model="study.consentNotificationEmail">
+                                <p class="ui pointing red basic tiny label" v-if="!$v.study.consentNotificationEmail.required && $v.study.consentNotificationEmail.$error">ID is required</p>
+                                <p class="ui pointing red basic tiny label" v-if="!$v.study.consentNotificationEmail.email && $v.study.consentNotificationEmail.$error">Email is invalid</p>
                             </div>
                         </div>
                     </form>
                 </div>
 
-                <br>
-
-                <div class="admin-info ui form">
-                    <h3 class="ui dividing header">Admin Information</h3>
-                    <div class="field" :class="{ 'error': $v.selectedAdmins.$error }">
-                        <label for="admin-list">Admin Accounts attached to this new Study</label>
-                        <multi-select :options="adminList" :selected-options="selectedAdmins" @select="onSelectAdmins" id="admin-list"></multi-select>
-                        <p class="ui pointing red basic tiny label" v-if="!$v.selectedAdmins.required && $v.selectedAdmins.$error">Must select at least one admin</p>   
-                    </div>
-
-                </div>
-
-                <br>
-
                 <div class="user-info">
-                    <h3 class="ui dividing header">Users Information</h3>
+                    <h3 class="ui dividing header">Bridge Study Administrators</h3>
 
                     <div class="users" v-if="users.length === 0">
                         <p>No User Information</p>
@@ -146,37 +130,51 @@
                         </form>  
                     </div>
                 </div>
+
+                <div class="admin-info ui form" style="margin-bottom: 2rem">
+                    <h3 class="ui dividing header">Synapse Team Management</h3>
+                    <div class="field" :class="{ 'error': $v.selectedAdmins.$error }">
+                        <label for="admin-list">Team administrators for the Synapse project team</label>
+                        <multi-select :options="adminList" :selected-options="selectedAdmins" @select="onSelectAdmins" id="admin-list"></multi-select>
+                        <p class="ui pointing red basic tiny label" v-if="!$v.selectedAdmins.required && $v.selectedAdmins.$error">Must select at least one admin</p>   
+                    </div>
+                </div>
             </div>
 
             <div class="email-template" v-if="isCreated">
                 <h3 class="ui dividing header">Email Template</h3>
 
-                <p><strong>This is the email sent to users requesting them to join Synapse Team when they sign up for your study. </strong></p>
+                <p><i>You can cut-and-paste this message into an email for each user you just added to the study. It provides further instructions on how they can get set up to use their project. </i></p>
 
                 <div class="ui message" v-for="(user, idx) in users">
+                    <p><code>Subject:</code> Welcome to Bridge</p>
+                    <p><code>Recipient:</code> {{user.email}}</p>
+
+                    <br>
+
                     <p>Hi {{ user.firstName }}, </p>
 
                     <p>We have created <strong><i>{{ study.name }}</i></strong>, which is your new study.</p>
 
-                    <p>This research study is powered by Bridge, a secure data storage service operated by Sage Bionetworks. In order to proceed, you must first create a Synapse account and request to join new Synapse Team related to new Study. Following are detailed steps:</p>
+                    <p>This research study is powered by Bridge, a secure data storage service operated by Sage Bionetworks. In order to proceed, you must first create a Synapse account and request to join the team for the Synapse project that will house your study's data. Follow these steps:</p>
 
                     <ol>
                         <li>Click the url in registration email from Synapse, and follow instructions to create a Synapse account using the email address <strong><i>{{ user.email }}</i></strong>;</li>
 
-                        <li>After signup, sign in the Synapse and click <a :href="teanUrl">this page</a> to see new Syanpse Team: <strong><i>{{ teamName }}</i></strong> for your study;</li>
+                        <li>After creating an account, sign in to Synapse and click <a :href="teamUrl">this page</a> to see new Synapse team: <strong><i>{{ teamName }}</i></strong> for your study;</li>
 
-                        <li>Click ‘Request to Join Team’ to send a request to join this new team;</li>
+                        <li>Click ‘Request to Join Team’ to send a request to join this new team.</li>
                     </ol>
 
-                    <p>Our Study administrator will add you to the study team as soon as possible. You will then be able to get access to the new Synapse Team and new Synapse Project related to this new Study.</p>
+                    <p>A temporary project administrator will add you to the study team as soon as possible. You will then be able to access to the project and the data related to your study. </p>
 
-                    <p>For general information about Synapse, Project and Team, we refer to <a :href="synapseDocs">the documentation</a>.</p>
+                    <p>For general information about Synapse, we refer to <a :href="synapseDocs">the Synapse documentation</a>.</p>
 
                     <br>
 
-                    <p>In the meanwhile, you have an account as a developer and/or researcher in the <a :href="researcherUI">Bridge Study Manager</a>, using your email address {{ user.email }}. We will have sent you a reset password link to set your password for the Study Manager.</p>
+                    <p>Meanwhile, you have an account as a developer and/or researcher in the <a :href="researcherUI">Bridge Study Manager</a>, using your email address {{ user.email }}. We will have sent you a reset password link to set your password for the Study Manager.</p>
 
-                    <p>For general information about the Bridge Study Manager, Bridge APIs, and SDKs, see <a :href="bridgeDocs">this doc</a>.</p>
+                    <p>For general information about the Bridge Study Manager, Bridge APIs, and SDKs, see the <a :href="bridgeDocs">Bridge documentation</a>.</p>
 
                     <br>
 
@@ -184,7 +182,7 @@
 
                     <br>
 
-                    <p>Thanks,</p>
+                    <p>Thank you,</p>
 
                     <p>The Bridge Team</p>
                 </div>
@@ -221,7 +219,8 @@
                     technicalEmail: '',
                     name: '',
                     sponsorName: '',
-                    active: 'true'
+                    active: true,
+                    emailVerificationEnabled: true
                 },
                 users: [
                     {
@@ -289,7 +288,7 @@
             teamName: function () {
                 return this.study.name.trim().replace(/\s/g, '_') + 'AccessTeam';
             },
-            teanUrl: function () {
+            teamUrl: function () {
                 return 'https://www.synapse.org/#!TeamSearch:' + this.teamName;
             },
             rolesList: function () {

@@ -1,47 +1,41 @@
 <template>
-    <div class="ui middle aligned center aligned grid login">
-        <div class="column">
-            <h2 class="ui image header">
-                <div class="content">
+    <div style="width: 30rem; margin: 4rem auto">
+        <h2 style="text-align:center">Sign In</h2>
+        <form class="ui large form">
+            <div class="ui negative message" v-if="error">
+                <h3>There is an issue with your request</h3>
+                <p>{{ error.message }}</p>
+            </div>
+            <div class="ui secondary segment">
+                <div class="field">
+                    <div class="ui left icon input">
+                    <i class="user icon"></i>
+                    <input type="text" name="email" placeholder="E-mail address" v-model="credentials.email">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                    <i class="lock icon"></i>
+                    <input type="password" name="password" placeholder="Password" v-model="credentials.password">
+                    </div>
+                </div>
+                <div class="two fields">
+                    <div class="field">
+                        <label for="env">Environment</label>
+                        <basic-select id="env" :options="envList" :selected-option="selectedEnv" 
+                            @select="onSelectEnv" :class="{ disabled: loading }"></basic-select>
+                    </div>
+                    <div class="field" >
+                        <label for="studyList">Study</label>
+                        <basic-select id="studyList" :options="studySummaryList" :selected-option="selectedStudy" 
+                            @select="onSelectStudy" :class="{ disabled: loading || studyListLoading }"></basic-select>
+                    </div>
+                </div>
+                <div class="ui fluid large primary submit button" @click="submit()" v-bind:class="{ loading: loading, disabled: loading }">     
                     Sign In
                 </div>
-            </h2>
-            <form class="ui large form">
-                <div class="ui negative message" v-if="error">
-                    <h3>There is an issue with your request</h3>
-                    <p>{{ error.message }}</p>
-                </div>
-                <div class="ui secondary segment">
-                    <div class="field">
-                        <div class="ui left icon input">
-                        <i class="user icon"></i>
-                        <input type="text" name="email" placeholder="E-mail address" v-model="credentials.email">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="ui left icon input">
-                        <i class="lock icon"></i>
-                        <input type="password" name="password" placeholder="Password" v-model="credentials.password">
-                        </div>
-                    </div>
-                    <div class="two fields">
-                        <div class="field">
-                            <label for="env">Environment</label>
-                            <basic-select id="env" :options="envList" :selected-option="selectedEnv" 
-                                @select="onSelectEnv" :class="{ disabled: loading }"></basic-select>
-                        </div>
-                        <div class="field" >
-                            <label for="studyList">Study</label>
-                            <basic-select id="studyList" :options="studySummaryList" :selected-option="selectedStudy" 
-                                @select="onSelectStudy" :class="{ disabled: loading || studyListLoading }"></basic-select>
-                        </div>
-                    </div>
-                    <div class="ui fluid large primary submit button" @click="submit()" v-bind:class="{ loading: loading, disabled: loading }">     
-                        Sign In
-                    </div>
-                </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </template>
 
