@@ -1,5 +1,5 @@
 <template>
-    <div id="app" style="height: 100%; outline: 2px solid blue">
+    <div id="app">
         <header :class="currentHeaderEnv"> 
             <div class="header-env">
                 <i class="white heartbeat icon"></i>
