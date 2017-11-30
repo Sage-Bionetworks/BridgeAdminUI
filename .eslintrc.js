@@ -1,8 +1,11 @@
 module.exports = {
     root: true,
     plugins: [
-        'html'
+        'html', 'promise'
     ],
     'rules': {
-    }
+    },
+    'extends': [
+        'plugin:promise/recommended'
+    ]
 }

@@ -1,9 +1,6 @@
 <template>
     <div>
         <vue-toastr ref="toastr"></vue-toastr>
-        <div class="ui negative message" v-if="error">
-            <p>{{ error.message }}</p>
-        </div>
         <div class="fixed-header">
             <div class="fixed-header-title">
                 <div class="fixed-header-heading">
@@ -25,6 +22,9 @@
             </div>
         </div>
         <div class="scrollbox">
+            <div class="ui negative message" v-if="error">
+                <p>{{ error.message }}</p>
+            </div>
 
             <p v-if="cacheKeys.length === 0 && loading === true"><strong>Loading Cache List...</strong></p>
 

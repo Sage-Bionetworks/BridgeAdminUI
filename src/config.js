@@ -12,11 +12,12 @@ module.exports = {
         'production': 'https://webservices.sagebridge.org'
     },
     adminList: [
-        { value: '3346407', text: 'test_1' },
-        { value: '3348228', text: 'test_2' },
-        { value: '3351155', text: 'Bridge_Study_Creator' },
-        { value: '273979', text: 'Brian_Bot' },
-        { value: '273984', text: 'Mike_Kellen' }
+        //{ value: '3346407', text: 'test_1' },
+        //{ value: '3348228', text: 'test_2' },
+        { value: '2026857', text: 'Alx Dark'},
+        //{ value: '3351155', text: 'Bridge_Study_Creator' },
+        { value: '273979', text: 'Brian Bot' },
+        { value: '273984', text: 'Mike Kellen' }
     ],
     rolesList: [
         { value: 'role_researcher', text: 'Researcher' },

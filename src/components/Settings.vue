@@ -21,7 +21,6 @@
             <div class="ui empty secondary pointing menu">
             </div>
         </div>
-
         <div class="scrollbox">
             <div class="ui negative message" v-if="error">
                 <p>{{ error.message }}</p>
